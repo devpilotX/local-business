@@ -4,7 +4,7 @@ A Next.js business website and authenticated Refine workspace for local visibili
 
 ## Included
 
-- Responsive website with light and dark themes, accessible Radix navigation and FAQ, Motion transitions with reduced-motion support, and locally served imagery.
+- Responsive website with light and dark themes, accessible Radix navigation menu and FAQ, CSS scroll and illustration animations with reduced-motion support, an isometric hero figure and locally served imagery.
 - Eight service pages, four industry pages, three practical guides, an about page, a pricing approach page and six policy/security pages.
 - Real enquiry intake with validation, consent, idempotency, sender/global rate limits, database persistence and a queued team notification.
 - Authenticated CRM for leads, clients, projects, tasks, website pages and site settings. Approved lead conversion creates a client and project atomically.
@@ -16,7 +16,7 @@ This is an implementation, not a certification of security, legal compliance, SE
 
 ## Stack
 
-Node.js 24, npm, Next.js App Router, React, TypeScript, Refine, Ant Design, Radix UI, Better Auth, Kysely, SQLite or PostgreSQL, Nodemailer, Motion and Lucide. Exact versions are in `package-lock.json`.
+Node.js 24, npm, Next.js App Router, React, TypeScript, Refine, Ant Design, Radix UI, Better Auth, Kysely, SQLite or PostgreSQL, Nodemailer, Geist fonts and Lucide. Exact versions are in `package-lock.json`.
 
 The interface composes maintained open-source primitives rather than creating a new UI, authentication or animation framework. See [third-party notices](docs/THIRD_PARTY.md).
 

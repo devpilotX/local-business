@@ -9,7 +9,7 @@ The application assembles maintained UI, auth, data and animation libraries. Cus
 - Anatomy by wheresryan22: MIT, https://github.com/wheresryan22/anatomy. The isometric drawing kit in `src/components/iso/` is vendored unchanged apart from import paths and theme tokens; the homepage enquiry figure is drawn with it. License copy: `licenses/anatomy-LICENSE.txt`.
 - Geist and Geist Mono: SIL Open Font License, https://github.com/vercel/geist-font. Self-hosted through the `geist` package.
 - Ant Design: MIT, https://github.com/ant-design/ant-design. Workspace forms, tables, modal confirmations and progress indicators.
-- Motion: MIT, https://github.com/motiondivision/motion. Small in-view transitions with a reduced-motion alternative.
+- Animations are CSS only (scroll timelines and keyframes) and are disabled under the reduced-motion preference. No animation library is bundled.
 - Lucide: ISC, https://github.com/lucide-icons/lucide. Interface icons and adapted MapPinned favicon geometry. See `licenses/lucide.txt`.
 - Better Auth: MIT, https://github.com/better-auth/better-auth. Credential and session handling.
 - Next.js: MIT, https://github.com/vercel/next.js. React application framework.
