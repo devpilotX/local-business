@@ -7,6 +7,7 @@ const assets = {
   learning: "public/images/learning.jpg",
   "apple-icon": "src/app/apple-icon.png",
   icon: "public/icon.png",
+  favicon: "src/app/favicon.ico",
 };
 for (const [name, destination] of Object.entries(assets)) {
   mkdirSync(dirname(destination), { recursive: true });

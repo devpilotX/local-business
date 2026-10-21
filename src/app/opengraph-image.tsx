@@ -24,22 +24,18 @@ export default function Image() {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-        <div
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: 14,
-            background: "#eef2ef",
-            color: "#0d1512",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 36,
-            fontWeight: 700,
-          }}
-        >
-          T
-        </div>
+        <svg width="56" height="56" viewBox="0 0 32 32">
+          <rect width="32" height="32" rx="8" fill="#eef2ef" />
+          <path fill="#0d1512" d="M15 26.5 9.45 19.26A7 7 0 1 1 20.55 19.26Z" />
+          <circle cx="15" cy="15" r="2.8" fill="#5cc898" />
+          <path
+            d="M19.44 5.48A10.5 10.5 0 0 1 25.14 12.28"
+            fill="none"
+            stroke="#0b6e4f"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+          />
+        </svg>
         <div style={{ fontSize: 40, fontWeight: 600, letterSpacing: -1 }}>
           Techcyme
         </div>

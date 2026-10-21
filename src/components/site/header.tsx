@@ -24,10 +24,20 @@ const getThemeServerSnapshot = (): "light" | "dark" => "light";
 
 export function BrandMark() {
   return (
-    <svg className="brand-mark" viewBox="0 0 28 28" aria-hidden="true">
-      <rect className="mark-bg" width="28" height="28" rx="7" />
-      <path className="mark-fg" d="M7 8.5h14v3h-5.5V21h-3v-9.5H7z" />
-      <circle className="mark-dot" cx="20.5" cy="19.5" r="2.25" />
+    <svg className="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+      <rect className="mark-bg" width="32" height="32" rx="8" />
+      <path
+        className="mark-fg"
+        d="M15 26.5 9.45 19.26A7 7 0 1 1 20.55 19.26Z"
+      />
+      <circle className="mark-dot" cx="15" cy="15" r="2.8" />
+      <path
+        className="mark-arc"
+        d="M19.44 5.48A10.5 10.5 0 0 1 25.14 12.28"
+        fill="none"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

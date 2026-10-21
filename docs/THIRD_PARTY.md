@@ -10,7 +10,7 @@ The application assembles maintained UI, auth, data and animation libraries. Cus
 - Geist and Geist Mono: SIL Open Font License, https://github.com/vercel/geist-font. Self-hosted through the `geist` package.
 - Ant Design: MIT, https://github.com/ant-design/ant-design. Workspace forms, tables, modal confirmations and progress indicators.
 - Animations are CSS only (scroll timelines and keyframes) and are disabled under the reduced-motion preference. No animation library is bundled.
-- Lucide: ISC, https://github.com/lucide-icons/lucide. Interface icons and adapted MapPinned favicon geometry. See `licenses/lucide.txt`.
+- Lucide: ISC, https://github.com/lucide-icons/lucide. Interface icons. The Techcyme mark (pin with signal arc) is original artwork; `npm run icons:build` regenerates the favicon and app icons from `public/icon.svg`. See `licenses/lucide.txt`.
 - Better Auth: MIT, https://github.com/better-auth/better-auth. Credential and session handling.
 - Next.js: MIT, https://github.com/vercel/next.js. React application framework.
 

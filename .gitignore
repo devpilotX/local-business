@@ -16,3 +16,4 @@ src/app/apple-icon.png
 
 # Local agent tooling
 .kiro/
+src/app/favicon.ico
