@@ -217,9 +217,6 @@ export function Header({ name }: { name: string }) {
               <Moon aria-hidden="true" size={17} />
             )}
           </button>
-          <Link className="header-signin" href="/admin/login">
-            Sign in
-          </Link>
           <Button asChild size="sm" className="header-cta">
             <Link href="/contact">Get in touch</Link>
           </Button>
@@ -304,11 +301,6 @@ export function Header({ name }: { name: string }) {
                   <Button asChild>
                     <Link href="/contact" onClick={() => setOpen(false)}>
                       Get in touch
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline">
-                    <Link href="/admin/login" onClick={() => setOpen(false)}>
-                      Team sign in
                     </Link>
                   </Button>
                 </div>

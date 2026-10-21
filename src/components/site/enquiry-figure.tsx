@@ -201,7 +201,8 @@ export function EnquiryFigure() {
           <circle className="fig-packet" r="2.6">
             <animateMotion dur="3.2s" repeatCount="indefinite" path={routeA} />
           </circle>
-          <circle className="fig-packet" r="2.6">
+          <circle className="fig-packet" r="2.6" visibility="hidden">
+            <set attributeName="visibility" to="visible" begin="1.6s" />
             <animateMotion
               dur="3.2s"
               begin="1.6s"

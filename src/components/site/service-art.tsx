@@ -6,6 +6,8 @@
 // motion. All art is decorative; the surrounding text carries the meaning.
 import {
   Bookmark,
+  Building2,
+  KeyRound,
   FileCheck2,
   ShieldCheck,
   Wrench,
@@ -31,7 +33,53 @@ import {
 import { Stage } from "@/components/iso/live";
 import type { IndustrySlug, ServiceId } from "./nav-data";
 
-function ProfileArt() {
+export type Place = {
+  name: string;
+  kind: string;
+  hours: string;
+  url: string;
+  cta: string;
+};
+
+export const places: Record<IndustrySlug | "default", Place> = {
+  default: {
+    name: "Your business name",
+    kind: "Cafe, 1.2 km away",
+    hours: "until 9 pm",
+    url: "yourbusiness.in",
+    cta: "Book a visit",
+  },
+  clinics: {
+    name: "Your clinic",
+    kind: "Dental clinic, 2 km away",
+    hours: "until 7 pm",
+    url: "yourclinic.in",
+    cta: "Request an appointment",
+  },
+  hospitality: {
+    name: "Your cafe",
+    kind: "Cafe, 800 m away",
+    hours: "until 10 pm",
+    url: "yourcafe.in",
+    cta: "View the menu",
+  },
+  coaching: {
+    name: "Your coaching centre",
+    kind: "Coaching centre, 3 km away",
+    hours: "until 8 pm",
+    url: "yourcentre.in",
+    cta: "See courses",
+  },
+  "local-services": {
+    name: "Your service business",
+    kind: "Plumber, serves your area",
+    hours: "until 6 pm",
+    url: "yourservice.in",
+    cta: "Request a quote",
+  },
+};
+
+function ProfileArt({ place = places.default }: { place?: Place }) {
   return (
     <div className="art-card art-profile">
       <div className="art-map" aria-hidden="true">
@@ -43,14 +91,14 @@ function ProfileArt() {
         <span className="art-pulse" />
       </div>
       <div className="art-card-body">
-        <strong className="art-title">Your business name</strong>
+        <strong className="art-title">{place.name}</strong>
         <span className="art-line">
           <MapPin size={12} />
-          Cafe, 1.2 km away
+          {place.kind}
         </span>
         <span className="art-line art-line--hours">
           <Clock size={12} />
-          <b>Open</b> until 9 pm
+          <b>Open</b> {place.hours}
         </span>
         <div className="art-actions">
           {[
@@ -76,21 +124,21 @@ function ProfileArt() {
   );
 }
 
-function WebsiteArt() {
+function WebsiteArt({ place = places.default }: { place?: Place }) {
   return (
     <div className="art-card art-browser">
       <div className="art-chrome">
         <i />
         <i />
         <i />
-        <span>yourbusiness.in</span>
+        <span>{place.url}</span>
       </div>
       <div className="art-page">
         <span className="art-block art-block--nav" />
         <span className="art-block art-block--h1" />
         <span className="art-block art-block--p" />
         <span className="art-block art-block--p2" />
-        <span className="art-cta">Book a visit</span>
+        <span className="art-cta">{place.cta}</span>
         <div className="art-tiles">
           <span />
           <span />
@@ -287,7 +335,7 @@ function ReportingArt() {
   );
 }
 
-const arts: Record<ServiceId, () => React.ReactElement> = {
+const arts: Record<ServiceId, (p: { place?: Place }) => React.ReactElement> = {
   "google-business-profile": ProfileArt,
   websites: WebsiteArt,
   automation: AutomationArt,
@@ -480,11 +528,15 @@ function Frame({
 
 type Size = { size?: "md" | "lg" };
 
-export function ServiceArt({ id, size = "md" }: { id: ServiceId } & Size) {
+export function ServiceArt({
+  id,
+  size = "md",
+  place,
+}: { id: ServiceId; place?: IndustrySlug } & Size) {
   const Art = arts[id];
   return (
     <Frame size={size}>
-      <Art />
+      <Art place={place ? places[place] : undefined} />
     </Frame>
   );
 }
@@ -505,6 +557,52 @@ export function ScopeArt({ size = "lg" }: Size) {
   return (
     <Frame size={size}>
       <PricingArt />
+    </Frame>
+  );
+}
+
+function HandoverArt() {
+  const accounts = [
+    [Globe, "Domain", "yourbusiness.in"],
+    [MapPin, "Google Business Profile", "Verified listing"],
+    [Send, "Website and forms", "Enquiries to your inbox"],
+    [ClipboardCheck, "Workflows", "Documented in n8n"],
+  ] as const;
+  return (
+    <div className="art-card art-pad art-handover">
+      <div className="art-head art-head--split">
+        <span>
+          <KeyRound size={14} />
+          <strong>Handover</strong>
+        </span>
+        <span className="art-owner">
+          <Building2 size={11} /> Your business
+        </span>
+      </div>
+      <div className="art-accounts">
+        {accounts.map(([Icon, name, meta], i) => (
+          <span key={name} className="art-anim-rise" style={delay(i)}>
+            <i>
+              <Icon size={13} />
+            </i>
+            <span>
+              <strong>{name}</strong>
+              <em>{meta}</em>
+            </span>
+            <b className="art-anim-pop" style={delay(i + 2)}>
+              <Check size={11} /> Owner
+            </b>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function HandoverFigure({ size = "lg" }: Size) {
+  return (
+    <Frame size={size}>
+      <HandoverArt />
     </Frame>
   );
 }

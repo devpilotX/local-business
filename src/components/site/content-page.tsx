@@ -9,8 +9,12 @@ import { FAQ } from "@/components/ui/faq";
 import { questions } from "@/components/ui/faq-data";
 import { PageHero, type Crumb } from "./page-hero";
 import { ServiceTile } from "./service-tile";
-import { IndustryArt, ScopeArt, ServiceArt } from "./service-art";
-import { EnquiryFigure } from "./enquiry-figure";
+import {
+  HandoverFigure,
+  IndustryArt,
+  ScopeArt,
+  ServiceArt,
+} from "./service-art";
 import { industryNav, type IndustrySlug, type ServiceId } from "./nav-data";
 import {
   Block,
@@ -42,6 +46,13 @@ import {
 const pricingQuestions = questions.filter((q) =>
   /cost|free|own|long/i.test(q.q),
 );
+
+const needsLede: Record<IndustrySlug, string> = {
+  clinics: "What patients check before they book a visit.",
+  hospitality: "What guests look up before they walk in or book a table.",
+  coaching: "What learners and parents compare before they enquire.",
+  "local-services": "What customers need to know before they ask for a quote.",
+};
 
 function crumbsFor(page: Content): Crumb[] {
   const [section, rest] = page.slug.split("/");
@@ -78,11 +89,11 @@ function HeroActions({ service }: { service?: ServiceId }) {
   );
 }
 
-function Tiles({ ids }: { ids: ServiceId[] }) {
+function Tiles({ ids, place }: { ids: ServiceId[]; place?: IndustrySlug }) {
   return (
     <div className="service-tiles">
       {ids.map((id) => (
-        <ServiceTile key={id} serviceId={id} headingLevel="h3" />
+        <ServiceTile key={id} serviceId={id} headingLevel="h3" place={place} />
       ))}
     </div>
   );
@@ -115,7 +126,7 @@ function ServiceLayout({ page, id }: { page: Content; id: ServiceId }) {
       <Block title="Related services" id="related" alt>
         <Tiles ids={detail.related} />
       </Block>
-      <CtaBand />
+      <CtaBand {...detail.cta} href={`/contact?service=${id}`} />
     </>
   );
 }
@@ -132,15 +143,11 @@ function IndustryLayout({ page, slug }: { page: Content; slug: IndustrySlug }) {
       >
         <HeroActions />
       </PageHero>
-      <Block
-        title="What your visitors need"
-        lede="The questions people ask before they visit, call or book."
-        id="needs"
-      >
+      <Block title="What your visitors need" lede={needsLede[slug]} id="needs">
         <Glance items={detail.needs} />
       </Block>
       <Block title="Services that help" id="services" alt>
-        <Tiles ids={detail.services} />
+        <Tiles ids={detail.services} place={slug} />
       </Block>
       <Block title="Good to know" id="notes">
         <Notes notes={detail.notes} />
@@ -152,7 +159,7 @@ function IndustryLayout({ page, slug }: { page: Content; slug: IndustrySlug }) {
           />
         </div>
       </Block>
-      <CtaBand />
+      <CtaBand {...detail.cta} />
     </>
   );
 }
@@ -245,7 +252,7 @@ function AboutLayout({ page }: { page: Content }) {
         crumbs={crumbsFor(page)}
         title={page.title}
         lede={page.summary}
-        aside={<EnquiryFigure />}
+        aside={<HandoverFigure />}
       >
         <HeroActions />
       </PageHero>
@@ -279,7 +286,10 @@ function AboutLayout({ page }: { page: Content }) {
           />
         </div>
       </Block>
-      <CtaBand />
+      <CtaBand
+        title="Work with a team that hands over the keys."
+        body="Tell us what you do and where the process gets stuck. We reply with a plain recommendation."
+      />
     </>
   );
 }

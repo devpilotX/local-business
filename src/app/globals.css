@@ -4662,3 +4662,63 @@ textarea {
     flex-direction: column;
   }
 }
+
+/* About: handover illustration */
+.art-handover {
+  width: min(100%, 320px);
+}
+.art-owner {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 10px;
+  font-weight: 600;
+}
+.art-accounts {
+  display: grid;
+  gap: 6px;
+}
+.art-accounts > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.art-accounts i {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.art-accounts > span > span {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+.art-accounts strong {
+  color: var(--ink);
+  font-size: 11.5px;
+}
+.art-accounts em {
+  color: var(--muted);
+  font-size: 10px;
+  font-style: normal;
+}
+.art-accounts b {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 600;
+}

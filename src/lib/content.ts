@@ -21,9 +21,9 @@ export const services = [
   },
   {
     id: "automation",
-    title: "n8n workflow automation",
+    title: "Workflow automation",
     summary:
-      "Connect enquiries, follow-ups and everyday tools without another copy-and-paste routine.",
+      "Automatic follow-ups for enquiries and everyday tasks, built with n8n, so nothing is retyped or missed.",
     icon: "Workflow",
   },
   {
@@ -109,9 +109,9 @@ export const pages: ContentPage[] = [
   },
   {
     slug: "services/automation",
-    title: "n8n workflow automation",
+    title: "Workflow automation",
     summary:
-      "Connect enquiries, follow-ups and everyday tools without another copy-and-paste routine.",
+      "Automatic follow-ups for enquiries and everyday tasks, built with n8n, so nothing is retyped or missed.",
     body: "## Start with one repeated task\nAutomation is useful when the process is understood. Before connecting tools, we ask what starts the work, what information it needs, where the result belongs and who should handle an exception.\n\nA first workflow might take a website enquiry, check required fields, create a lead record and notify the right person. Another might prepare a follow-up task after a project status changes. The goal is a reliable handoff, not a workflow that runs without anyone knowing what happened.\n\n## What we scope\n- The trigger, inputs and expected output.\n- Supported integrations and required subscriptions.\n- Access permissions and where credentials are stored.\n- Duplicate handling, retries and failure notifications.\n- Test cases using suitable sample data.\n- Documentation, ownership and ongoing monitoring.\n\n## Built around your tools\nn8n is a workflow platform, not a guarantee that every application can be connected in the same way. Some integrations need an API plan. Others need a webhook, a provider approval or a change to the process. We check those dependencies before agreeing the implementation.\n\n## Customer data needs care\nOnly collect the information the workflow needs. Agree who can access it, how long it is kept and what happens when a customer asks for a correction or deletion. An automated message still needs an appropriate purpose and any consent required for the channel.\n\n## Keep a person in the loop\nWe do not recommend unattended decisions about medical advice, payment disputes or other sensitive matters. A workflow should make the next responsible action easier to see. Errors should reach an owner, and the workflow should have a way to pause safely.\n\n## Handover and support\nThe handover includes a process map, configuration notes and instructions for checking a failed run. Hosting, provider costs and ongoing monitoring are agreed separately. Read the [n8n documentation](https://docs.n8n.io/) for platform details.\n\nDescribe one task you repeat each week. That is a more useful starting point than a list of tools you feel you ought to connect.",
   },
   {

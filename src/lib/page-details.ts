@@ -41,7 +41,13 @@ import type { IndustrySlug, ServiceId } from "@/components/site/nav-data";
 export type Item = { icon: LucideIcon; title: string; body: string };
 export type Step = { title: string; body: string };
 
+export interface Cta {
+  title: string;
+  body: string;
+}
+
 export interface ServiceDetail {
+  cta: Cta;
   includes: Item[];
   steps: Step[];
   notes: string[];
@@ -50,6 +56,10 @@ export interface ServiceDetail {
 
 export const serviceDetails: Record<ServiceId, ServiceDetail> = {
   "google-business-profile": {
+    cta: {
+      title: "Is your profile telling the right story?",
+      body: "Send us your business name. We review what Google shows today and what to fix first.",
+    },
     includes: [
       {
         icon: BadgeCheck,
@@ -93,6 +103,10 @@ export const serviceDetails: Record<ServiceId, ServiceDetail> = {
     related: ["local-seo", "websites", "social-media"],
   },
   websites: {
+    cta: {
+      title: "Planning a new website?",
+      body: "Tell us what visitors need to find. We reply with suggested pages and a written scope.",
+    },
     includes: [
       {
         icon: PanelsTopLeft,
@@ -112,7 +126,7 @@ export const serviceDetails: Record<ServiceId, ServiceDetail> = {
       {
         icon: Search,
         title: "Search basics built in",
-        body: "Titles, descriptions, canonical URLs and a sitemap.",
+        body: "Clear page titles, descriptions and a sitemap search engines can read.",
       },
     ],
     steps: [
@@ -136,6 +150,10 @@ export const serviceDetails: Record<ServiceId, ServiceDetail> = {
     related: ["google-business-profile", "booking", "automation"],
   },
   automation: {
+    cta: {
+      title: "Which task do you repeat every day?",
+      body: "Describe it in a few lines. We tell you whether a workflow is worth building.",
+    },
     includes: [
       {
         icon: Workflow,
@@ -165,7 +183,7 @@ export const serviceDetails: Record<ServiceId, ServiceDetail> = {
       },
       {
         title: "Connect",
-        body: "Build the n8n workflow with supported tools and test cases.",
+        body: "Build the workflow in n8n, an automation tool, and test it with sample data.",
       },
       {
         title: "Monitor",
@@ -179,6 +197,10 @@ export const serviceDetails: Record<ServiceId, ServiceDetail> = {
     related: ["messaging", "reporting", "websites"],
   },
   "local-seo": {
+    cta: {
+      title: "Not sure why customers cannot find you?",
+      body: "We check your website, profile and listings and explain the gaps in plain language.",
+    },
     includes: [
       {
         icon: MapPin,
@@ -192,8 +214,8 @@ export const serviceDetails: Record<ServiceId, ServiceDetail> = {
       },
       {
         icon: Code,
-        title: "Structured data",
-        body: "Search engines can read your business type, hours and services.",
+        title: "Readable by search engines",
+        body: "Your business type, hours and services marked up so search results can show them.",
       },
       {
         icon: Gauge,
@@ -222,6 +244,10 @@ export const serviceDetails: Record<ServiceId, ServiceDetail> = {
     related: ["google-business-profile", "websites", "reporting"],
   },
   booking: {
+    cta: {
+      title: "Want fewer back-and-forth messages?",
+      body: "Tell us how appointments work today. We suggest a request journey that fits it.",
+    },
     includes: [
       {
         icon: CalendarCheck,
@@ -265,6 +291,10 @@ export const serviceDetails: Record<ServiceId, ServiceDetail> = {
     related: ["websites", "messaging", "automation"],
   },
   "social-media": {
+    cta: {
+      title: "Are your social profiles up to date?",
+      body: "List the channels you use. We review them and agree who replies and how quickly.",
+    },
     includes: [
       {
         icon: UserRound,
@@ -308,6 +338,10 @@ export const serviceDetails: Record<ServiceId, ServiceDetail> = {
     related: ["google-business-profile", "messaging", "local-seo"],
   },
   messaging: {
+    cta: {
+      title: "Messages getting missed?",
+      body: "Tell us which channel customers use. We plan routing that respects their consent.",
+    },
     includes: [
       {
         icon: MessageCircle,
@@ -351,6 +385,10 @@ export const serviceDetails: Record<ServiceId, ServiceDetail> = {
     related: ["automation", "booking", "social-media"],
   },
   reporting: {
+    cta: {
+      title: "What do you need to know each week?",
+      body: "Send us the questions. We work out which data can answer them reliably.",
+    },
     includes: [
       {
         icon: Inbox,
@@ -396,6 +434,7 @@ export const serviceDetails: Record<ServiceId, ServiceDetail> = {
 };
 
 export interface IndustryDetail {
+  cta: Cta;
   needs: Item[];
   notes: string[];
   services: ServiceId[];
@@ -403,6 +442,10 @@ export interface IndustryDetail {
 
 export const industryDetails: Record<IndustrySlug, IndustryDetail> = {
   clinics: {
+    cta: {
+      title: "Planning a clearer website for your practice?",
+      body: "Tell us about your services and how appointments work. We reply with a written scope.",
+    },
     needs: [
       {
         icon: Stethoscope,
@@ -432,6 +475,10 @@ export const industryDetails: Record<IndustrySlug, IndustryDetail> = {
     services: ["websites", "google-business-profile", "booking"],
   },
   hospitality: {
+    cta: {
+      title: "Want guests to find your menu and hours first time?",
+      body: "Tell us where people look today. We plan the pages and profile updates that help.",
+    },
     needs: [
       {
         icon: Utensils,
@@ -461,6 +508,10 @@ export const industryDetails: Record<IndustrySlug, IndustryDetail> = {
     services: ["google-business-profile", "websites", "messaging"],
   },
   coaching: {
+    cta: {
+      title: "Want enquiries that name the right course?",
+      body: "Share your courses and batches. We plan pages and an enquiry form around them.",
+    },
     needs: [
       {
         icon: BookOpen,
@@ -490,6 +541,10 @@ export const industryDetails: Record<IndustrySlug, IndustryDetail> = {
     services: ["websites", "automation", "messaging"],
   },
   "local-services": {
+    cta: {
+      title: "Want quote requests with the details you need?",
+      body: "Tell us your services and area. We plan the pages and the follow-up behind them.",
+    },
     needs: [
       {
         icon: Wrench,
