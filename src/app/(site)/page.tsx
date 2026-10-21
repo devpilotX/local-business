@@ -301,7 +301,7 @@ export default async function Home() {
                         <I size={17} aria-hidden="true" />
                       </span>
                       <div>
-                        <h4>{String(heading)}</h4>
+                        <h3>{String(heading)}</h3>
                         <p>{String(body)}</p>
                       </div>
                       <span
