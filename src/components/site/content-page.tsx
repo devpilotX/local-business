@@ -1,31 +1,47 @@
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowRight, Check, Mail } from "lucide-react";
 import type { ContentPage as Content } from "@/lib/content";
 import { legalSlugs, services } from "@/lib/content";
 import { launchApproved, business } from "@/lib/config";
 import { Button } from "@/components/ui/button";
+import { FAQ } from "@/components/ui/faq";
+import { questions } from "@/components/ui/faq-data";
 import { PageHero, type Crumb } from "./page-hero";
 import { ServiceTile } from "./service-tile";
-import { ServiceArt } from "./service-art";
+import { IndustryArt, ScopeArt, ServiceArt } from "./service-art";
+import { EnquiryFigure } from "./enquiry-figure";
 import { industryNav, type IndustrySlug, type ServiceId } from "./nav-data";
+import {
+  Block,
+  CtaBand,
+  Details,
+  Flow,
+  Glance,
+  Notes,
+} from "./detail-sections";
+import {
+  aboutGaps,
+  aboutNeeds,
+  industryDetails,
+  pricingFactors,
+  pricingNotes,
+  pricingSteps,
+  principles,
+  processSteps,
+  serviceDetails,
+} from "@/lib/page-details";
 import {
   JsonLd,
   articleSchema,
+  faqSchema,
   serviceSchema,
   webPageSchema,
 } from "@/lib/schema";
 
-const relatedServices: Record<ServiceId, ServiceId[]> = {
-  "google-business-profile": ["local-seo", "websites", "social-media"],
-  websites: ["google-business-profile", "booking", "automation"],
-  automation: ["messaging", "reporting", "websites"],
-  "local-seo": ["google-business-profile", "websites", "reporting"],
-  booking: ["websites", "messaging", "automation"],
-  "social-media": ["google-business-profile", "messaging", "local-seo"],
-  messaging: ["automation", "booking", "social-media"],
-  reporting: ["automation", "local-seo", "websites"],
-};
+const pricingQuestions = questions.filter((q) =>
+  /cost|free|own|long/i.test(q.q),
+);
 
 function crumbsFor(page: Content): Crumb[] {
   const [section, rest] = page.slug.split("/");
@@ -46,49 +62,234 @@ function crumbsFor(page: Content): Crumb[] {
   return [self];
 }
 
-export function ContentPage({ page, email }: { page: Content; email: string }) {
-  const legal = legalSlugs.includes(page.slug);
-  const [section, rest] = page.slug.split("/");
-  const serviceId = section === "services" ? (rest as ServiceId) : undefined;
-  const path = `/${page.slug}`;
-  const related = serviceId
-    ? relatedServices[serviceId]
-    : services.slice(0, 3).map((s) => s.id);
-
-  const schema = [
-    webPageSchema({ title: page.title, description: page.summary, path }),
-    ...(serviceId
-      ? [serviceSchema({ name: page.title, description: page.summary, path })]
-      : []),
-    ...(section === "guides"
-      ? [articleSchema({ title: page.title, description: page.summary, path })]
-      : []),
-  ];
-
+function HeroActions({ service }: { service?: ServiceId }) {
   return (
     <>
-      <JsonLd data={schema} />
+      <Button asChild>
+        <Link href={`/contact${service ? `?service=${service}` : ""}`}>
+          Talk about your project
+          <ArrowRight size={16} aria-hidden="true" />
+        </Link>
+      </Button>
+      <Button asChild variant="outline">
+        <Link href="/pricing">How pricing works</Link>
+      </Button>
+    </>
+  );
+}
+
+function Tiles({ ids }: { ids: ServiceId[] }) {
+  return (
+    <div className="service-tiles">
+      {ids.map((id) => (
+        <ServiceTile key={id} serviceId={id} headingLevel="h3" />
+      ))}
+    </div>
+  );
+}
+
+function ServiceLayout({ page, id }: { page: Content; id: ServiceId }) {
+  const detail = serviceDetails[id];
+  return (
+    <>
       <PageHero
         crumbs={crumbsFor(page)}
         title={page.title}
         lede={page.summary}
-        aside={serviceId ? <ServiceArt id={serviceId} size="lg" /> : undefined}
+        aside={<ServiceArt id={id} size="lg" />}
       >
-        {legal ? null : (
-          <>
-            <Button asChild>
-              <Link
-                href={`/contact${serviceId ? `?service=${serviceId}` : ""}`}
-              >
-                Talk about your project
-                <ArrowRight size={16} aria-hidden="true" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/pricing">How pricing works</Link>
-            </Button>
-          </>
-        )}
+        <HeroActions service={id} />
+      </PageHero>
+      <Block title="What's included" id="included">
+        <Glance items={detail.includes} />
+      </Block>
+      <Block title="How it works" id="how" alt>
+        <Flow steps={detail.steps} />
+      </Block>
+      <Block title="Good to know" id="notes">
+        <Notes notes={detail.notes} />
+        <div style={{ marginTop: 16 }}>
+          <Details body={page.body} />
+        </div>
+      </Block>
+      <Block title="Related services" id="related" alt>
+        <Tiles ids={detail.related} />
+      </Block>
+      <CtaBand />
+    </>
+  );
+}
+
+function IndustryLayout({ page, slug }: { page: Content; slug: IndustrySlug }) {
+  const detail = industryDetails[slug];
+  return (
+    <>
+      <PageHero
+        crumbs={crumbsFor(page)}
+        title={page.title}
+        lede={page.summary}
+        aside={<IndustryArt slug={slug} size="lg" />}
+      >
+        <HeroActions />
+      </PageHero>
+      <Block
+        title="What your visitors need"
+        lede="The questions people ask before they visit, call or book."
+        id="needs"
+      >
+        <Glance items={detail.needs} />
+      </Block>
+      <Block title="Services that help" id="services" alt>
+        <Tiles ids={detail.services} />
+      </Block>
+      <Block title="Good to know" id="notes">
+        <Notes notes={detail.notes} />
+        <div style={{ marginTop: 16 }}>
+          <Details
+            body={page.body}
+            title="Read how we plan it"
+            hint="Content, privacy and the team handoff in detail."
+          />
+        </div>
+      </Block>
+      <CtaBand />
+    </>
+  );
+}
+
+function PricingLayout({ page }: { page: Content }) {
+  return (
+    <>
+      <JsonLd data={faqSchema(pricingQuestions)} />
+      <PageHero
+        crumbs={crumbsFor(page)}
+        title={page.title}
+        lede={page.summary}
+        aside={<ScopeArt />}
+      >
+        <Button asChild>
+          <Link href="/contact">
+            Request a quote <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/services">Explore services</Link>
+        </Button>
+      </PageHero>
+      <Block title="How a quote works" id="quote">
+        <Flow steps={pricingSteps} />
+      </Block>
+      <Block
+        title="What shapes the cost"
+        lede="Three kinds of work, each priced from its own factors."
+        id="factors"
+        alt
+      >
+        <div className="price-grid">
+          {pricingFactors.map(({ icon: Icon, title, factors }) => (
+            <article className="price-card reveal" key={title}>
+              <span className="glance-icon">
+                <Icon size={19} aria-hidden="true" />
+              </span>
+              <h3>{title}</h3>
+              <p className="price-tag">
+                Quoted per project
+                <span>After a short review of what you have</span>
+              </p>
+              <ul aria-label={`${title} cost factors`}>
+                {factors.map((f) => (
+                  <li key={f}>
+                    <Check size={15} aria-hidden="true" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </Block>
+      <Block title="No surprises" id="no-surprises">
+        <Notes notes={pricingNotes} />
+        <div style={{ marginTop: 16 }}>
+          <Details
+            body={page.body}
+            title="Read the pricing details"
+            hint="Scope changes, ongoing support and provider costs."
+          />
+        </div>
+      </Block>
+      <section className="section-sm section-alt">
+        <div className="container faq-layout">
+          <div className="section-head">
+            <h2>Pricing questions</h2>
+            <p>
+              Anything else? <Link href="/contact">Ask us directly.</Link>
+            </p>
+          </div>
+          <FAQ items={pricingQuestions} />
+        </div>
+      </section>
+      <CtaBand
+        title="Get a written quote."
+        body="Describe the project and the tools you use. We reply with a scope you can compare."
+        secondary={{ href: "/services", label: "Explore services" }}
+      />
+    </>
+  );
+}
+
+function AboutLayout({ page }: { page: Content }) {
+  return (
+    <>
+      <PageHero
+        crumbs={crumbsFor(page)}
+        title={page.title}
+        lede={page.summary}
+        aside={<EnquiryFigure />}
+      >
+        <HeroActions />
+      </PageHero>
+      <Block
+        title="The gaps we fix"
+        lede="Good businesses lose customers to small, fixable problems."
+        id="gaps"
+      >
+        <Glance items={aboutGaps} columns={3} />
+      </Block>
+      <Block title="How we work" id="principles" alt>
+        <Glance items={principles} />
+      </Block>
+      <Block title="From first message to handover" id="process">
+        <Flow steps={processSteps} />
+      </Block>
+      <Block title="What we need from you" id="needs" alt>
+        <ul className="notes">
+          {aboutNeeds.map((n) => (
+            <li key={n}>
+              <Check size={18} aria-hidden="true" />
+              {n}
+            </li>
+          ))}
+        </ul>
+        <div style={{ marginTop: 16 }}>
+          <Details
+            body={page.body}
+            title="Read our approach in full"
+            hint="Ownership, honesty about results and the handover."
+          />
+        </div>
+      </Block>
+      <CtaBand />
+    </>
+  );
+}
+
+function ArticleLayout({ page, email }: { page: Content; email: string }) {
+  const legal = legalSlugs.includes(page.slug);
+  return (
+    <>
+      <PageHero crumbs={crumbsFor(page)} title={page.title} lede={page.summary}>
+        {legal ? null : <HeroActions />}
       </PageHero>
       <div className="container article-layout">
         <article className="prose">
@@ -114,9 +315,7 @@ export function ContentPage({ page, email }: { page: Content; email: string }) {
             <h2>Have a question?</h2>
             <p>Tell us about your business and the part you want to improve.</p>
             <Button asChild>
-              <Link
-                href={`/contact${serviceId ? `?service=${serviceId}` : ""}`}
-              >
+              <Link href="/contact">
                 Start an enquiry
                 <ArrowRight size={16} aria-hidden="true" />
               </Link>
@@ -129,35 +328,61 @@ export function ContentPage({ page, email }: { page: Content; email: string }) {
           <div className="aside-links">
             <h2>Keep reading</h2>
             <ul>
-              <li>
-                <Link href="/services">
-                  All services <ArrowRight size={14} aria-hidden="true" />
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing">
-                  Pricing approach <ArrowRight size={14} aria-hidden="true" />
-                </Link>
-              </li>
-              <li>
-                <Link href="/guides">
-                  Practical guides <ArrowRight size={14} aria-hidden="true" />
-                </Link>
-              </li>
+              {[
+                ["/services", "All services"],
+                ["/pricing", "Pricing approach"],
+                ["/guides", "Practical guides"],
+              ].map(([href, text]) => (
+                <li key={href}>
+                  <Link href={href}>
+                    {text} <ArrowRight size={14} aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </aside>
       </div>
+    </>
+  );
+}
+
+export function ContentPage({ page, email }: { page: Content; email: string }) {
+  const [section, rest] = page.slug.split("/");
+  const path = `/${page.slug}`;
+  const serviceId =
+    section === "services" && rest in serviceDetails
+      ? (rest as ServiceId)
+      : undefined;
+  const industry =
+    section === "industries" && rest in industryDetails
+      ? (rest as IndustrySlug)
+      : undefined;
+
+  const schema = [
+    webPageSchema({ title: page.title, description: page.summary, path }),
+    ...(serviceId
+      ? [serviceSchema({ name: page.title, description: page.summary, path })]
+      : []),
+    ...(section === "guides"
+      ? [articleSchema({ title: page.title, description: page.summary, path })]
+      : []),
+  ];
+
+  return (
+    <>
+      <JsonLd data={schema} />
       {serviceId ? (
-        <section className="container related" aria-labelledby="related-title">
-          <h2 id="related-title">Related services</h2>
-          <div className="service-tiles">
-            {related.map((id) => (
-              <ServiceTile key={id} serviceId={id} headingLevel="h3" />
-            ))}
-          </div>
-        </section>
-      ) : null}
+        <ServiceLayout page={page} id={serviceId} />
+      ) : industry ? (
+        <IndustryLayout page={page} slug={industry} />
+      ) : page.slug === "pricing" ? (
+        <PricingLayout page={page} />
+      ) : page.slug === "about" ? (
+        <AboutLayout page={page} />
+      ) : (
+        <ArticleLayout page={page} email={email} />
+      )}
     </>
   );
 }

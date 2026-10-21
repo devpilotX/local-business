@@ -431,6 +431,20 @@ test("every service page shows its illustration", async ({ page }) => {
   }
   await page.goto("/services");
   await expect(page.locator(".service-tile .art")).toHaveCount(8);
+  for (const slug of [
+    "industries/clinics",
+    "industries/hospitality",
+    "industries/coaching",
+    "industries/local-services",
+    "pricing",
+  ]) {
+    await page.goto(`/${slug}`);
+    await expect(page.locator(".page-hero .art"), slug).toBeVisible();
+    await expect(
+      page.locator(".glance-card, .flow li").first(),
+      slug,
+    ).toBeVisible();
+  }
 });
 
 test("admin workspace renders without console warnings", async ({ page }) => {
@@ -457,4 +471,17 @@ test("admin workspace renders without console warnings", async ({ page }) => {
     }),
   ).toBeVisible();
   expect(messages.filter((m) => /deprecated|Warning/i.test(m))).toEqual([]);
+});
+
+test("brand icons are served", async ({ request }) => {
+  for (const [path, type] of [
+    ["/favicon.ico", "image/x-icon"],
+    ["/icon.svg", "image/svg+xml"],
+    ["/icon.png", "image/png"],
+    ["/apple-icon.png", "image/png"],
+  ]) {
+    const response = await request.get(path);
+    expect(response.status(), path).toBe(200);
+    expect(response.headers()["content-type"], path).toContain(type);
+  }
 });

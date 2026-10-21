@@ -6,6 +6,12 @@
 // motion. All art is decorative; the surrounding text carries the meaning.
 import {
   Bookmark,
+  FileCheck2,
+  ShieldCheck,
+  Wrench,
+  Utensils,
+  GraduationCap,
+  Stethoscope,
   CalendarCheck,
   Check,
   ClipboardCheck,
@@ -23,7 +29,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { Stage } from "@/components/iso/live";
-import type { ServiceId } from "./nav-data";
+import type { IndustrySlug, ServiceId } from "./nav-data";
 
 function ProfileArt() {
   return (
@@ -292,19 +298,213 @@ const arts: Record<ServiceId, () => React.ReactElement> = {
   reporting: ReportingArt,
 };
 
-export function ServiceArt({
-  id,
-  size = "md",
+const delay = (i: number) => ({ "--i": i }) as React.CSSProperties;
+
+function ClinicArt() {
+  return (
+    <div className="art-card art-pad">
+      <div className="art-head">
+        <Stethoscope size={14} />
+        <strong>Request an appointment</strong>
+      </div>
+      <div className="art-chips">
+        <span>General check-up</span>
+        <span data-picked="">Dental cleaning</span>
+        <span>Follow-up</span>
+      </div>
+      <span className="art-field">Your name</span>
+      <span className="art-field">Phone or email</span>
+      <span className="art-cta art-cta--wide">Send request</span>
+      <span className="art-note art-anim-fade" style={delay(3)}>
+        <ShieldCheck size={12} /> Only what we need to call you back
+      </span>
+    </div>
+  );
+}
+
+function HospitalityArt() {
+  const rows = ["Breakfast", "Lunch", "Coffee and tea", "Desserts"];
+  return (
+    <div className="art-card art-pad">
+      <div className="art-head art-head--split">
+        <span>
+          <Utensils size={14} />
+          <strong>Menu</strong>
+        </span>
+        <span className="art-open">
+          <b>Open</b> until 10 pm
+        </span>
+      </div>
+      <div className="art-menu">
+        {rows.map((r, i) => (
+          <span key={r} className="art-anim-rise" style={delay(i)}>
+            {r}
+            <i />
+            <em />
+          </span>
+        ))}
+      </div>
+      <div className="art-row-actions">
+        <span className="art-cta">
+          <Navigation size={12} /> Directions
+        </span>
+        <span className="art-ghost">
+          <Phone size={12} /> Call
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function CoachingArt() {
+  const rows = [
+    ["Mathematics", "Class 10", "Mon, Wed"],
+    ["Physics", "Class 12", "Tue, Thu"],
+    ["Spoken English", "All levels", "Sat"],
+  ];
+  return (
+    <div className="art-card art-pad">
+      <div className="art-head">
+        <GraduationCap size={14} />
+        <strong>Courses and batches</strong>
+      </div>
+      <div className="art-table">
+        {rows.map(([course, level, days], i) => (
+          <span
+            key={course}
+            className="art-anim-rise"
+            data-picked={i === 1 ? "" : undefined}
+            style={delay(i)}
+          >
+            <strong>{course}</strong>
+            <em>{level}</em>
+            <em>{days}</em>
+          </span>
+        ))}
+      </div>
+      <span className="art-cta">Enquire about Physics</span>
+    </div>
+  );
+}
+
+function LocalServicesArt() {
+  return (
+    <div className="art-area">
+      <div className="art-radius">
+        <span className="art-ring" />
+        <span className="art-ring art-ring--2" />
+        <span className="art-home">
+          <Wrench size={16} />
+        </span>
+        {[
+          [18, 30],
+          [72, 22],
+          [64, 74],
+          [26, 70],
+        ].map(([x, y], i) => (
+          <span
+            key={i}
+            className="art-mini-pin art-anim-pop"
+            style={{ left: `${x}%`, top: `${y}%`, ...delay(i) }}
+          >
+            <MapPin size={13} />
+          </span>
+        ))}
+      </div>
+      <div
+        className="art-card art-pad art-quote art-anim-rise"
+        style={delay(4)}
+      >
+        <strong>Quote request</strong>
+        <span>Kitchen tap repair</span>
+        <span className="art-chip">
+          <Check size={11} /> Assigned
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function PricingArt() {
+  const lines = [
+    "Deliverables",
+    "Responsibilities",
+    "Review rounds",
+    "Timetable",
+    "Payment schedule",
+  ];
+  return (
+    <div className="art-card art-pad art-doc">
+      <div className="art-head">
+        <FileCheck2 size={14} />
+        <strong>Written scope</strong>
+      </div>
+      <div className="art-checks">
+        {lines.map((l, i) => (
+          <span key={l} className="art-anim-rise" style={delay(i)}>
+            <Check size={12} />
+            {l}
+            <i />
+          </span>
+        ))}
+      </div>
+      <span className="art-stamp art-anim-pop" style={delay(6)}>
+        Approved before work starts
+      </span>
+    </div>
+  );
+}
+
+const industryArts: Record<IndustrySlug, () => React.ReactElement> = {
+  clinics: ClinicArt,
+  hospitality: HospitalityArt,
+  coaching: CoachingArt,
+  "local-services": LocalServicesArt,
+};
+
+function Frame({
+  size,
+  children,
 }: {
-  id: ServiceId;
-  size?: "md" | "lg";
+  size: "md" | "lg";
+  children: React.ReactNode;
 }) {
-  const Art = arts[id];
   return (
     <Stage className={`art art--${size}`}>
       <div className="art-stage" aria-hidden="true">
-        <Art />
+        {children}
       </div>
     </Stage>
+  );
+}
+
+type Size = { size?: "md" | "lg" };
+
+export function ServiceArt({ id, size = "md" }: { id: ServiceId } & Size) {
+  const Art = arts[id];
+  return (
+    <Frame size={size}>
+      <Art />
+    </Frame>
+  );
+}
+
+export function IndustryArt({
+  slug,
+  size = "md",
+}: { slug: IndustrySlug } & Size) {
+  const Art = industryArts[slug];
+  return (
+    <Frame size={size}>
+      <Art />
+    </Frame>
+  );
+}
+
+export function ScopeArt({ size = "lg" }: Size) {
+  return (
+    <Frame size={size}>
+      <PricingArt />
+    </Frame>
   );
 }
