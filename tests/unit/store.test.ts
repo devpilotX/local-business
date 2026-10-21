@@ -102,6 +102,21 @@ describe("enquiry intake", () => {
         .execute(),
     ).toHaveLength(5);
   });
+  it("increments active rate-limit windows and resets expired windows", async () => {
+    await receiveInquiry(inquiry());
+    await receiveInquiry(inquiry());
+    const active = await db().selectFrom("rate_limits").selectAll().execute();
+    expect(active).toHaveLength(2);
+    expect(active.every((row) => row.hits === 2)).toBe(true);
+    await db().updateTable("rate_limits").set({ expires_at: 0 }).execute();
+    await receiveInquiry(inquiry());
+    const renewed = await db().selectFrom("rate_limits").selectAll().execute();
+    expect(renewed).toHaveLength(2);
+    expect(renewed.every((row) => row.hits === 1)).toBe(true);
+    expect(renewed.every((row) => Number(row.expires_at) > Date.now())).toBe(
+      true,
+    );
+  });
 });
 describe("CRM integrity", () => {
   it("rejects stale edits and records a field-only audit trail", async () => {

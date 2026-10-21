@@ -259,8 +259,8 @@ async function limit(tx: Transaction<Store>, key: string, max: number) {
     .values({ key, hits: 1, expires_at: expires })
     .onConflict((oc) =>
       oc.column("key").doUpdateSet({
-        hits: sql`case when expires_at < ${now} then 1 else hits + 1 end`,
-        expires_at: sql`case when expires_at < ${now} then ${expires} else expires_at end`,
+        hits: sql`case when rate_limits.expires_at < ${now} then 1 else rate_limits.hits + 1 end`,
+        expires_at: sql`case when rate_limits.expires_at < ${now} then ${expires} else rate_limits.expires_at end`,
       }),
     )
     .returningAll()
