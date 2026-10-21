@@ -13,3 +13,6 @@ test-results/
 public/images/*.jpg
 public/icon.png
 src/app/apple-icon.png
+
+# Local agent tooling
+.kiro/
