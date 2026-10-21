@@ -40,7 +40,11 @@ export default async function Guides() {
       <section className="section-sm">
         <div className="container guide-grid">
           {guides.map((g) => (
-            <Link key={g.slug} className="guide-card" href={`/${g.slug}`}>
+            <Link
+              key={g.slug}
+              className="guide-card reveal"
+              href={`/${g.slug}`}
+            >
               <span className="guide-meta">
                 <BookOpen size={15} aria-hidden="true" />
                 Checklist

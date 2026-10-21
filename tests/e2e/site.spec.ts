@@ -416,3 +416,45 @@ test("all CRM screens load and authenticated CRUD preserves integrity", async ({
   const invalid = await page.request.get("/api/crm/nonexistent");
   expect(invalid.status()).toBe(404);
 });
+
+test("every service page shows its illustration", async ({ page }) => {
+  for (const slug of pages
+    .map((p) => p.slug)
+    .filter((s) => s.startsWith("services/"))) {
+    await page.goto(`/${slug}`);
+    const art = page.locator(".page-hero .art");
+    await expect(art, slug).toBeVisible();
+    await expect(art.locator(".art-stage"), slug).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+  }
+  await page.goto("/services");
+  await expect(page.locator(".service-tile .art")).toHaveCount(8);
+});
+
+test("admin workspace renders without console warnings", async ({ page }) => {
+  const messages: string[] = [];
+  page.on("console", (m) => {
+    if (["warning", "error"].includes(m.type())) messages.push(m.text());
+  });
+  await page.goto("/admin/login");
+  await page
+    .getByLabel("Email address", { exact: true })
+    .fill("qa-admin@example.test");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill(process.env.QA_PASSWORD!);
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Business overview" }),
+  ).toBeVisible();
+  await page.goto("/admin/leads");
+  await expect(page.locator("h1")).toHaveText("Leads");
+  await expect(
+    page.getByRole("navigation", { name: "Workspace" }).getByRole("link", {
+      name: "Leads",
+    }),
+  ).toBeVisible();
+  expect(messages.filter((m) => /deprecated|Warning/i.test(m))).toEqual([]);
+});

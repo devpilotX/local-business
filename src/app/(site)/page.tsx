@@ -18,13 +18,7 @@ import { FAQ } from "@/components/ui/faq";
 import { questions } from "@/components/ui/faq-data";
 import { Reveal } from "@/components/site/reveal";
 import { EnquiryFigure } from "@/components/site/enquiry-figure";
-import {
-  BrowserMock,
-  FlowMock,
-  ListingMock,
-  ReportMock,
-  SearchMock,
-} from "@/components/site/mocks";
+import { ServiceArt } from "@/components/site/service-art";
 import { industryNav, type ServiceId } from "@/components/site/nav-data";
 import { getSettings } from "@/lib/site-data";
 import { industries, services } from "@/lib/content";
@@ -39,34 +33,28 @@ import {
 const bento: {
   id: ServiceId;
   wide?: boolean;
-  visual: React.ReactNode;
   tags: string[];
 }[] = [
   {
     id: "google-business-profile",
     wide: true,
-    visual: <ListingMock />,
     tags: ["Setup and verification", "Hours and categories", "Photos"],
   },
   {
     id: "websites",
     wide: true,
-    visual: <BrowserMock />,
     tags: ["Clear pages", "Enquiry forms", "Fast on mobile"],
   },
   {
     id: "automation",
-    visual: <FlowMock />,
     tags: ["n8n", "Lead to task"],
   },
   {
     id: "local-seo",
-    visual: <SearchMock />,
     tags: ["Structure", "Local pages"],
   },
   {
     id: "reporting",
-    visual: <ReportMock />,
     tags: ["Enquiries", "Project status"],
   },
 ];
@@ -216,7 +204,9 @@ export default async function Home() {
                   }
                 >
                   <Link className="bento-card" href={`/services/${card.id}`}>
-                    <div className="bento-visual">{card.visual}</div>
+                    <div className="bento-visual">
+                      <ServiceArt id={card.id} />
+                    </div>
                     <div className="bento-body">
                       <h3>
                         {service.title}
@@ -343,7 +333,7 @@ export default async function Home() {
           </div>
           <div className="principles">
             {principles.map(({ icon: Icon, title: heading, body }) => (
-              <div className="principle" key={heading}>
+              <div className="principle reveal" key={heading}>
                 <Icon size={22} aria-hidden="true" />
                 <h3>{heading}</h3>
                 <p>{body}</p>
@@ -411,7 +401,7 @@ export default async function Home() {
           </div>
           <ol className="steps">
             {steps.map((step, index) => (
-              <li className="step" key={step.title}>
+              <li className="step reveal" key={step.title}>
                 <div className="step-marker">
                   <span>{String(index + 1).padStart(2, "0")}</span>
                 </div>
@@ -438,7 +428,7 @@ export default async function Home() {
 
       <section className="section">
         <div className="container">
-          <div className="cta-band">
+          <div className="cta-band reveal">
             <div className="cta-band-inner">
               <div>
                 <h2>Let's find your next useful step.</h2>

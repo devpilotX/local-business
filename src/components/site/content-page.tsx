@@ -6,7 +6,8 @@ import { legalSlugs, services } from "@/lib/content";
 import { launchApproved, business } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { PageHero, type Crumb } from "./page-hero";
-import { ServiceCard } from "./service-card";
+import { ServiceTile } from "./service-tile";
+import { ServiceArt } from "./service-art";
 import { industryNav, type IndustrySlug, type ServiceId } from "./nav-data";
 import {
   JsonLd,
@@ -14,6 +15,17 @@ import {
   serviceSchema,
   webPageSchema,
 } from "@/lib/schema";
+
+const relatedServices: Record<ServiceId, ServiceId[]> = {
+  "google-business-profile": ["local-seo", "websites", "social-media"],
+  websites: ["google-business-profile", "booking", "automation"],
+  automation: ["messaging", "reporting", "websites"],
+  "local-seo": ["google-business-profile", "websites", "reporting"],
+  booking: ["websites", "messaging", "automation"],
+  "social-media": ["google-business-profile", "messaging", "local-seo"],
+  messaging: ["automation", "booking", "social-media"],
+  reporting: ["automation", "local-seo", "websites"],
+};
 
 function crumbsFor(page: Content): Crumb[] {
   const [section, rest] = page.slug.split("/");
@@ -39,10 +51,9 @@ export function ContentPage({ page, email }: { page: Content; email: string }) {
   const [section, rest] = page.slug.split("/");
   const serviceId = section === "services" ? (rest as ServiceId) : undefined;
   const path = `/${page.slug}`;
-  const related = services
-    .filter((s) => s.id !== serviceId)
-    .slice(0, 3)
-    .map((s) => s.id);
+  const related = serviceId
+    ? relatedServices[serviceId]
+    : services.slice(0, 3).map((s) => s.id);
 
   const schema = [
     webPageSchema({ title: page.title, description: page.summary, path }),
@@ -57,7 +68,12 @@ export function ContentPage({ page, email }: { page: Content; email: string }) {
   return (
     <>
       <JsonLd data={schema} />
-      <PageHero crumbs={crumbsFor(page)} title={page.title} lede={page.summary}>
+      <PageHero
+        crumbs={crumbsFor(page)}
+        title={page.title}
+        lede={page.summary}
+        aside={serviceId ? <ServiceArt id={serviceId} size="lg" /> : undefined}
+      >
         {legal ? null : (
           <>
             <Button asChild>
@@ -135,9 +151,9 @@ export function ContentPage({ page, email }: { page: Content; email: string }) {
       {serviceId ? (
         <section className="container related" aria-labelledby="related-title">
           <h2 id="related-title">Related services</h2>
-          <div className="service-grid">
+          <div className="service-tiles">
             {related.map((id) => (
-              <ServiceCard key={id} serviceId={id} headingLevel="h3" />
+              <ServiceTile key={id} serviceId={id} headingLevel="h3" />
             ))}
           </div>
         </section>

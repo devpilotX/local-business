@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { ServiceCard } from "@/components/site/service-card";
+import { ServiceTile } from "@/components/site/service-tile";
+import { Reveal } from "@/components/site/reveal";
 import { PageHero } from "@/components/site/page-hero";
 import { Button } from "@/components/ui/button";
 import { services } from "@/lib/content";
@@ -50,33 +51,29 @@ export default function Services() {
       />
       <section className="section-sm">
         <div className="container">
-          <div className="service-grid">
+          <div className="service-tiles">
             {services.map((service) => (
-              <ServiceCard key={service.id} serviceId={service.id} />
+              <Reveal key={service.id}>
+                <ServiceTile serviceId={service.id} />
+              </Reveal>
             ))}
-          </div>
-        </div>
-      </section>
-      <section className="section-sm">
-        <div className="container">
-          <div className="cta-band">
-            <div className="cta-band-inner">
-              <div>
-                <h2>Not sure which one you need?</h2>
-                <p>
-                  Describe the problem. We will suggest the smallest useful
-                  starting point and explain why.
-                </p>
-              </div>
-              <div className="cta-actions">
-                <Button asChild variant="light" size="lg">
+            <Reveal>
+              <div className="service-tile service-tile--cta">
+                <div>
+                  <h2>Not sure which one you need?</h2>
+                  <p>
+                    Describe the problem. We will suggest the smallest useful
+                    starting point and explain why.
+                  </p>
+                </div>
+                <Button asChild variant="light">
                   <Link href="/contact">
                     Get a recommendation
-                    <ArrowRight size={17} aria-hidden="true" />
+                    <ArrowRight size={16} aria-hidden="true" />
                   </Link>
                 </Button>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>

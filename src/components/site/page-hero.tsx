@@ -32,19 +32,27 @@ export function PageHero({
   title,
   lede,
   children,
+  aside,
 }: {
   crumbs: Crumb[];
   title: React.ReactNode;
   lede?: React.ReactNode;
   children?: React.ReactNode;
+  aside?: React.ReactNode;
 }) {
+  const copy = (
+    <>
+      <Breadcrumbs items={crumbs} />
+      <h1>{title}</h1>
+      {lede ? <p className="lede">{lede}</p> : null}
+      {children ? <div className="page-hero-actions">{children}</div> : null}
+    </>
+  );
   return (
-    <section className="page-hero">
+    <section className={aside ? "page-hero page-hero--split" : "page-hero"}>
       <div className="container">
-        <Breadcrumbs items={crumbs} />
-        <h1>{title}</h1>
-        {lede ? <p className="lede">{lede}</p> : null}
-        {children ? <div className="page-hero-actions">{children}</div> : null}
+        {aside ? <div>{copy}</div> : copy}
+        {aside}
       </div>
     </section>
   );
