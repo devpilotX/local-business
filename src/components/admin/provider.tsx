@@ -21,7 +21,7 @@ import {
   Users,
 } from "lucide-react";
 import { dataProvider, resources, label } from "@/lib/admin-client";
-import { BrandMark } from "@/components/site/header";
+import { AdminSider } from "./sider";
 
 const icons: Record<string, React.ReactNode> = {
   dashboard: <LayoutDashboard size={16} aria-hidden="true" />,
@@ -143,15 +143,17 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
           options={{ syncWithLocation: false, disableTelemetry: true }}
         >
           <ThemedLayout
-            Title={({ collapsed }) => (
-              <Link href="/admin" className="admin-brand">
-                <BrandMark />
-                {collapsed ? null : (
-                  <>
-                    Techcyme <small>CRM</small>
-                  </>
-                )}
-              </Link>
+            Sider={() => (
+              <AdminSider
+                items={[
+                  { key: "/admin", label: "Overview", icon: icons.dashboard },
+                  ...resources.map((name) => ({
+                    key: `/admin/${name}`,
+                    label: label(name),
+                    icon: icons[name],
+                  })),
+                ]}
+              />
             )}
             Header={TopBar}
           >

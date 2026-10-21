@@ -3255,3 +3255,31 @@ textarea {
     padding: 16px 12px !important;
   }
 }
+
+.admin-sider {
+  border-right: 1px solid var(--line);
+}
+.admin-sider .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.admin-sider-head {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--line);
+}
+.admin-sider.ant-layout-sider-collapsed .admin-sider-head {
+  justify-content: center;
+  padding: 0;
+}
+.admin-sider .ant-menu {
+  padding-top: 8px;
+  border-inline-end: 0 !important;
+}
+.admin-sider .ant-layout-sider-trigger {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
