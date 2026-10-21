@@ -84,6 +84,10 @@ export function ContactForm({
       onSubmit={submit}
       aria-label="Project enquiry"
     >
+      <h2 className="form-title">Project enquiry</h2>
+      <p className="form-intro">
+        All fields are required unless marked optional.
+      </p>
       <div className="form-row">
         <label>
           Your name
@@ -118,7 +122,7 @@ export function ContactForm({
           />
         </label>
         <label>
-          Phone <span className="muted">(optional)</span>
+          Phone <span className="optional">(optional)</span>
           <input name="phone" type="tel" autoComplete="tel" maxLength={32} />
         </label>
       </div>
@@ -185,7 +189,7 @@ export function ContactForm({
           </>
         )}
       </Button>
-      <p className="form-help">
+      <p className="form-foot">
         This sends an enquiry. It does not start paid work or subscribe you to
         marketing.
       </p>

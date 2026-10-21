@@ -21,6 +21,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: page.title,
       description: page.summary,
       url: `/${page.slug}`,
+      type: page.slug.startsWith("guides/") ? "article" : "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: page.title,
+      description: page.summary,
     },
   };
 }

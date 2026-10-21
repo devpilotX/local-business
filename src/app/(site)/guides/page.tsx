@@ -1,46 +1,58 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, BookOpen } from "lucide-react";
 import { publishedContent } from "@/lib/site-data";
+import { PageHero } from "@/components/site/page-hero";
+import { JsonLd, webPageSchema } from "@/lib/schema";
+
+const description =
+  "Practical checklists for Google Business Profiles, website enquiries and a first automation project. Free to read, no sign-up.";
+
 export const metadata: Metadata = {
   title: "Practical guides for local businesses",
-  description:
-    "Specific checklists for business profiles, website enquiries and a first automation project.",
+  description,
   alternates: { canonical: "/guides" },
+  openGraph: {
+    title: "Practical guides for local businesses",
+    description,
+    url: "/guides",
+  },
 };
+
 export default async function Guides() {
   const guides = (await publishedContent()).filter((p) =>
     p.slug.startsWith("guides/"),
   );
   return (
     <>
-      <section className="page-intro container">
-        <h1>
-          Useful before
-          <br />
-          you buy anything.
-        </h1>
-        <p>
-          Check the basics, ask better questions and understand the work before
-          choosing a provider.
-        </p>
-      </section>
-      <section className="section container guide-list">
-        {guides.map((g) => (
-          <article key={g.slug}>
-            <h2>
-              <Link href={`/${g.slug}`}>
-                {g.title}
-                <ArrowUpRight aria-hidden="true" size={24} />
-              </Link>
-            </h2>
-            <p>{g.summary}</p>
-            <Link className="text-link" href={`/${g.slug}`}>
-              Read the guide
-              <ArrowUpRight size={17} aria-hidden="true" />
+      <JsonLd
+        data={webPageSchema({
+          title: "Practical guides for local businesses",
+          description,
+          path: "/guides",
+        })}
+      />
+      <PageHero
+        crumbs={[{ name: "Guides", path: "/guides" }]}
+        title="Useful before you buy anything."
+        lede="Check the basics, ask better questions and understand the work before choosing a provider."
+      />
+      <section className="section-sm">
+        <div className="container guide-grid">
+          {guides.map((g) => (
+            <Link key={g.slug} className="guide-card" href={`/${g.slug}`}>
+              <span className="guide-meta">
+                <BookOpen size={15} aria-hidden="true" />
+                Checklist
+              </span>
+              <h2>{g.title}</h2>
+              <p>{g.summary}</p>
+              <span className="more">
+                Read the guide <ArrowRight size={15} aria-hidden="true" />
+              </span>
             </Link>
-          </article>
-        ))}
+          ))}
+        </div>
       </section>
     </>
   );

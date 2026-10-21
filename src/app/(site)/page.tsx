@@ -3,367 +3,463 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
+  BadgeCheck,
   Check,
-  MapPin,
-  PanelsTopLeft,
-  Workflow,
   ClipboardCheck,
+  FileText,
+  KeyRound,
+  Mail,
+  Scale,
   Send,
   ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FAQ } from "@/components/ui/faq";
-import { ServiceCard } from "@/components/site/service-card";
+import { questions } from "@/components/ui/faq-data";
 import { Reveal } from "@/components/site/reveal";
+import { EnquiryFigure } from "@/components/site/enquiry-figure";
+import {
+  BrowserMock,
+  FlowMock,
+  ListingMock,
+  ReportMock,
+  SearchMock,
+} from "@/components/site/mocks";
+import { industryNav, type ServiceId } from "@/components/site/nav-data";
 import { getSettings } from "@/lib/site-data";
-import { industries } from "@/lib/content";
-import { siteUrl } from "@/lib/config";
+import { industries, services } from "@/lib/content";
+import {
+  JsonLd,
+  faqSchema,
+  organizationSchema,
+  websiteSchema,
+  webPageSchema,
+} from "@/lib/schema";
+
+const bento: {
+  id: ServiceId;
+  wide?: boolean;
+  visual: React.ReactNode;
+  tags: string[];
+}[] = [
+  {
+    id: "google-business-profile",
+    wide: true,
+    visual: <ListingMock />,
+    tags: ["Setup and verification", "Hours and categories", "Photos"],
+  },
+  {
+    id: "websites",
+    wide: true,
+    visual: <BrowserMock />,
+    tags: ["Clear pages", "Enquiry forms", "Fast on mobile"],
+  },
+  {
+    id: "automation",
+    visual: <FlowMock />,
+    tags: ["n8n", "Lead to task"],
+  },
+  {
+    id: "local-seo",
+    visual: <SearchMock />,
+    tags: ["Structure", "Local pages"],
+  },
+  {
+    id: "reporting",
+    visual: <ReportMock />,
+    tags: ["Enquiries", "Project status"],
+  },
+];
+
+const principles = [
+  {
+    icon: FileText,
+    title: "Written scope first",
+    body: "Deliverables, dependencies and cost are agreed in writing before work starts.",
+  },
+  {
+    icon: KeyRound,
+    title: "Accounts stay yours",
+    body: "Your domain, profile and tools remain in the business name, with a documented handover.",
+  },
+  {
+    icon: Scale,
+    title: "Honest about limits",
+    body: "Google controls rankings. We improve the information and structure, without promising positions.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Privacy by default",
+    body: "Forms collect only what is needed, and personal data stays out of logs and exports.",
+  },
+];
+
+const steps = [
+  {
+    title: "Review the starting point",
+    body: "Tell us what you do, what you already have and where enquiries or updates get stuck.",
+  },
+  {
+    title: "Agree a useful scope",
+    body: "Choose the deliverables, responsibilities and review points. Everything is written down.",
+  },
+  {
+    title: "Build, check and hand over",
+    body: "We complete the agreed checks, walk you through the result and hand over access.",
+  },
+];
+
 export default async function Home() {
   const settings = await getSettings();
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: settings.siteName,
-    url: siteUrl,
-    email: settings.contactEmail,
-    description: settings.heroDescription,
-  };
+  const title = settings.heroTitle;
+  const split = title.match(/^(.*?)(easier to find\.?)$/i);
+
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(schema).replaceAll("<", "\\u003c"),
-        }}
+      <JsonLd
+        data={[
+          organizationSchema({
+            name: settings.siteName,
+            email: settings.contactEmail,
+            description: settings.heroDescription,
+            phone: settings.phone || undefined,
+          }),
+          websiteSchema(settings.siteName),
+          webPageSchema({
+            title: `${settings.siteName} | Google Business Profile, websites and workflows`,
+            description: settings.heroDescription,
+            path: "/",
+          }),
+          faqSchema(questions),
+        ]}
       />
+
       <section className="hero">
         <div className="container hero-grid">
           <div className="hero-copy">
-            <h1>
-              {settings.heroTitle === "Make your business easier to find." ? (
+            <h1 className="hero-title">
+              {split ? (
                 <>
-                  Make your business
-                  <br />
-                  <span>easier to find.</span>
+                  {split[1]}
+                  <span>{split[2]}</span>
                 </>
               ) : (
-                settings.heroTitle
+                title
               )}
             </h1>
-            <p>{settings.heroDescription}</p>
-            <div className="hero-buttons">
-              <Button asChild>
+            <p className="lede hero-lede">{settings.heroDescription}</p>
+            <div className="hero-actions">
+              <Button asChild size="lg">
                 <Link href="/contact">
-                  Plan your project
-                  <ArrowUpRight size={18} aria-hidden="true" />
+                  Plan your project <ArrowRight size={17} aria-hidden="true" />
                 </Link>
               </Button>
-              <Button variant="outline" asChild>
-                <Link href="/services">
-                  Explore services
-                  <ArrowRight size={18} aria-hidden="true" />
-                </Link>
+              <Button asChild size="lg" variant="outline">
+                <Link href="/services">Explore services</Link>
               </Button>
             </div>
-            <p className="hero-note">
-              <Check size={17} aria-hidden="true" />
-              Know the scope before work starts.
+            <ul className="hero-points">
+              <li>
+                <Check size={16} aria-hidden="true" /> Fixed written scope
+              </li>
+              <li>
+                <Check size={16} aria-hidden="true" /> Business-owned accounts
+              </li>
+              <li>
+                <Check size={16} aria-hidden="true" /> No ranking promises
+              </li>
+            </ul>
+          </div>
+          <div className="hero-figure">
+            <EnquiryFigure />
+          </div>
+        </div>
+      </section>
+
+      <section className="industry-bar" aria-label="Industries we plan for">
+        <div className="container industry-bar-inner">
+          <p>Planned for the businesses that make a neighbourhood.</p>
+          {industries.map((industry) => {
+            const meta = industryNav[industry.slug];
+            const Icon = meta.icon;
+            return (
+              <Link key={industry.slug} href={`/industries/${industry.slug}`}>
+                <Icon size={18} aria-hidden="true" />
+                {meta.label}
+                <ArrowUpRight className="arrow" size={15} aria-hidden="true" />
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head section-head--split">
+            <h2>
+              Everything a local business needs to be found and followed up.
+            </h2>
+            <p>
+              Start with the gap that costs you the most. Be easier to find,
+              give visitors a clear next step, or organise the work behind the
+              scenes.
             </p>
           </div>
-          <Reveal className="hero-visual">
-            <div className="hero-image">
-              <Image
-                src="/images/local-cafe.jpg"
-                alt="A welcoming independent cafe with a warm wood interior"
-                fill
-                sizes="(max-width: 900px) 100vw, 50vw"
-                priority
-              />
-              <div className="hero-image-caption">
-                Real places.
-                <br />A better online presence.
+          <div className="bento">
+            {bento.map((card) => {
+              const service = services.find((s) => s.id === card.id)!;
+              return (
+                <Reveal
+                  key={card.id}
+                  className={
+                    card.wide ? "bento-cell bento-cell--wide" : "bento-cell"
+                  }
+                >
+                  <Link className="bento-card" href={`/services/${card.id}`}>
+                    <div className="bento-visual">{card.visual}</div>
+                    <div className="bento-body">
+                      <h3>
+                        {service.title}
+                        <ArrowUpRight size={18} aria-hidden="true" />
+                      </h3>
+                      <p>{service.summary}</p>
+                      <ul className="bento-tags" aria-label="Includes">
+                        {card.tags.map((tag) => (
+                          <li key={tag}>{tag}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </Link>
+                </Reveal>
+              );
+            })}
+          </div>
+          <p style={{ marginTop: 28 }}>
+            <Link className="text-link" href="/services">
+              See all {services.length} services
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </p>
+        </div>
+      </section>
+
+      <section className="section section-alt">
+        <div className="container split">
+          <div>
+            <h2>Less copying between inboxes. More following through.</h2>
+            <p className="lede">
+              A saved enquiry can create a lead, a follow-up task and a team
+              notification. Your team sees the next action instead of searching
+              several inboxes.
+            </p>
+            <ul className="check-list">
+              <li>
+                <BadgeCheck size={18} aria-hidden="true" />
+                Every enquiry is saved before the visitor sees a success
+                message.
+              </li>
+              <li>
+                <BadgeCheck size={18} aria-hidden="true" />
+                Follow-ups appear as tasks with an owner and a due date.
+              </li>
+              <li>
+                <BadgeCheck size={18} aria-hidden="true" />
+                Email status shows the difference between queued and accepted.
+              </li>
+            </ul>
+            <Button asChild variant="outline">
+              <Link href="/services/automation">
+                How workflow support works
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            </Button>
+          </div>
+          <Reveal>
+            <div className="pipeline" aria-label="Example enquiry handoff">
+              <div className="pipeline-head">
+                <strong>Enquiry handoff</strong>
+                <span>example</span>
               </div>
-            </div>
-            <div className="journey-card">
-              <div>
-                <MapPin size={21} aria-hidden="true" />
-                <span>Get discovered</span>
-              </div>
-              <ArrowRight size={17} aria-hidden="true" />
-              <div>
-                <PanelsTopLeft size={21} aria-hidden="true" />
-                <span>Build trust</span>
-              </div>
-              <ArrowRight size={17} aria-hidden="true" />
-              <div>
-                <Workflow size={21} aria-hidden="true" />
-                <span>Stay connected</span>
-              </div>
+              <ol className="pipeline-steps">
+                {[
+                  [
+                    Send,
+                    "Enquiry saved",
+                    "Recorded before a success message is shown.",
+                    "Done",
+                    "",
+                  ],
+                  [
+                    ClipboardCheck,
+                    "Follow-up task created",
+                    "Assigned to the team with a due date.",
+                    "Done",
+                    "",
+                  ],
+                  [
+                    Mail,
+                    "Team notified",
+                    "Queued email, then accepted by the provider.",
+                    "Queued",
+                    "pending",
+                  ],
+                ].map(([Icon, heading, body, state, tone]) => {
+                  const I = Icon as typeof Send;
+                  return (
+                    <li key={String(heading)}>
+                      <span className="pipeline-icon">
+                        <I size={17} aria-hidden="true" />
+                      </span>
+                      <div>
+                        <h4>{String(heading)}</h4>
+                        <p>{String(body)}</p>
+                      </div>
+                      <span
+                        className="status"
+                        data-tone={String(tone) || undefined}
+                      >
+                        {String(state)}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ol>
+              <p className="pipeline-foot">
+                Workflow scope depends on your tools, permissions and provider
+                plans.
+              </p>
             </div>
           </Reveal>
         </div>
       </section>
-      <section className="audience-strip">
+
+      <section className="section">
         <div className="container">
-          <p>For the businesses that make a neighbourhood.</p>
-          <div>
-            <Link href="/industries/clinics">Clinics</Link>
-            <Link href="/industries/hospitality">Hospitality</Link>
-            <Link href="/industries/coaching">Coaching centres</Link>
-            <Link href="/industries/local-services">Local services</Link>
-          </div>
-        </div>
-      </section>
-      <section className="section container">
-        <div className="section-heading">
-          <h2>
-            A useful next step,
-            <br />
-            not a bigger to-do list.
-          </h2>
-          <p>
-            Start where the gap is. Make your business easier to discover, give
-            visitors a clear next step, or organise the work behind the scenes.
-          </p>
-        </div>
-        <div className="three-grid">
-          {(["google-business-profile", "websites", "automation"] as const).map(
-            (serviceId) => (
-              <Reveal key={serviceId}>
-                <ServiceCard serviceId={serviceId} />
-              </Reveal>
-            ),
-          )}
-        </div>
-        <Link className="text-link section-link" href="/services">
-          See all services
-          <ArrowUpRight size={18} aria-hidden="true" />
-        </Link>
-      </section>
-      <section className="section soft-section">
-        <div className="container split-section">
-          <div>
-            <h2>
-              Good work deserves
-              <br />a clear first impression.
-            </h2>
-            <p className="section-description">
-              A clinic needs trust. A cafe needs useful visit information. A
-              coaching centre needs clear course enquiries. The website should
-              match the way your business works.
+          <div className="section-head">
+            <h2>How we work with every client.</h2>
+            <p>
+              A few commitments that apply to every project, whatever its size.
             </p>
-            <Link className="text-link" href="/about">
-              How we approach the work
-              <ArrowUpRight size={18} aria-hidden="true" />
-            </Link>
           </div>
-          <div className="approach-list">
-            {[
-              [
-                "Start with the customer",
-                "Answer the questions people have before they contact you.",
-              ],
-              [
-                "Keep ownership clear",
-                "Know who controls your profile, domain and connected tools.",
-              ],
-              [
-                "Make the handover useful",
-                "Understand what changed and how routine updates are handled.",
-              ],
-            ].map(([title, body]) => (
-              <div key={title}>
-                <ShieldCheck size={21} aria-hidden="true" />
-                <div>
-                  <h3>{title}</h3>
-                  <p>{body}</p>
-                </div>
+          <div className="principles">
+            {principles.map(({ icon: Icon, title: heading, body }) => (
+              <div className="principle" key={heading}>
+                <Icon size={22} aria-hidden="true" />
+                <h3>{heading}</h3>
+                <p>{body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
-      <section className="section container">
-        <div className="section-heading">
-          <h2>
-            Your business has
-            <br />
-            its own way of working.
-          </h2>
-          <p>
-            These are the business journeys we plan for. Photography is
-            illustrative, not a client endorsement.
-          </p>
-        </div>
-        <div className="three-grid">
-          {industries.slice(0, 3).map((industry, i) => (
-            <Reveal key={industry.slug}>
-              <Link
-                className="industry-card"
-                href={`/industries/${industry.slug}`}
-              >
-                <div className="industry-image">
-                  <Image
-                    src={`/images/${industry.image}`}
-                    alt={
-                      i === 0
-                        ? "A bright dental treatment room"
-                        : i === 1
-                          ? "A cafe interior"
-                          : "A group learning in a lecture room"
-                    }
-                    fill
-                    sizes="(max-width: 760px) 100vw, 33vw"
-                  />
-                </div>
-                <div>
-                  <h3>
-                    {
-                      [
-                        "Clinics and practices",
-                        "Cafes, stays and hospitality",
-                        "Coaching and learning centres",
-                      ][i]
-                    }
-                    <ArrowUpRight size={20} aria-hidden="true" />
-                  </h3>
-                  <p>{industry.summary}</p>
-                </div>
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-      <section className="section workflow-section">
-        <div className="container split-section">
-          <div>
-            <h2>
-              Less copying.
-              <br />
-              More following through.
-            </h2>
-            <p className="section-description">
-              A saved enquiry can create a lead, a follow-up task and a team
-              notification. Your team sees the next action instead of searching
-              several inboxes.
-            </p>
-            <Button asChild variant="outline">
-              <Link href="/services/automation">
-                Explore workflow support
-                <ArrowUpRight size={18} aria-hidden="true" />
-              </Link>
-            </Button>
-          </div>
-          <div className="workflow-card">
-            <h3>A clearer enquiry handoff</h3>
-            {[
-              [
-                Send,
-                "Enquiry saved",
-                "Keep a record before showing a success message.",
-              ],
-              [
-                ClipboardCheck,
-                "Follow-up task created",
-                "Make the next action visible to the team.",
-              ],
-              [
-                Workflow,
-                "Notification tracked",
-                "Distinguish a queued email from one accepted by a provider.",
-              ],
-            ].map(([Icon, title, body]) => {
-              const I = Icon as typeof Send;
-              return (
-                <div className="workflow-step" key={String(title)}>
-                  <span>
-                    <I size={21} aria-hidden="true" />
-                  </span>
-                  <div>
-                    <h4>{String(title)}</h4>
-                    <p>{String(body)}</p>
-                  </div>
-                </div>
-              );
-            })}
-            <p className="workflow-note">
-              Workflow scope depends on your tools, permissions and provider
-              plans.
-            </p>
-          </div>
-        </div>
-      </section>
-      <section className="section container">
-        <div className="section-heading">
-          <h2>
-            Clear from
-            <br />
-            the first conversation.
-          </h2>
-          <p>
-            You should understand the work, the dependencies and the cost before
-            committing to a project.
-          </p>
-        </div>
-        <div className="three-grid process-grid">
-          {[
-            [
-              "01",
-              "Review the starting point",
-              "Tell us what you do, what you already have and where the process gets in the way.",
-            ],
-            [
-              "02",
-              "Agree a useful scope",
-              "Choose the deliverables, responsibilities and review points in writing.",
-            ],
-            [
-              "03",
-              "Build, check and hand over",
-              "Review the work, complete the agreed checks and take ownership of the next steps.",
-            ],
-          ].map(([number, title, body]) => (
-            <div key={number}>
-              <span className="step-number">{number}</span>
-              <h3>{title}</h3>
-              <p>{body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-      <section className="section container faq-section">
-        <div>
-          <h2>
-            Questions worth
-            <br />
-            asking first.
-          </h2>
-          <p className="section-description">
-            A straightforward answer is more useful than a promise we cannot
-            verify.
-          </p>
-        </div>
-        <FAQ />
-      </section>
-      <section className="cta-section">
+
+      <section className="section section-alt">
         <div className="container">
-          <div>
-            <h2>
-              Let's find your
-              <br />
-              next useful step.
-            </h2>
+          <div className="section-head section-head--split">
+            <h2>Planned around the way your business works.</h2>
             <p>
-              Tell us about your business. We'll start with the problem, not a
-              package.
+              A clinic needs trust, a cafe needs visit information and a
+              coaching centre needs clear course enquiries.
             </p>
           </div>
-          <Button asChild variant="light">
-            <Link href="/contact">
-              Talk about your project
-              <ArrowUpRight size={18} aria-hidden="true" />
-            </Link>
-          </Button>
+          <div className="industry-grid">
+            {industries.slice(0, 3).map((industry, i) => (
+              <Reveal key={industry.slug}>
+                <Link
+                  className="industry-card"
+                  href={`/industries/${industry.slug}`}
+                >
+                  <div className="industry-media">
+                    <Image
+                      src={`/images/${industry.image}`}
+                      alt={
+                        [
+                          "A bright dental treatment room",
+                          "A cafe interior with a wooden counter",
+                          "A group learning in a lecture room",
+                        ][i]
+                      }
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, 33vw"
+                    />
+                  </div>
+                  <div className="industry-body">
+                    <h3>
+                      {industryNav[industry.slug].label}
+                      <ArrowUpRight size={18} aria-hidden="true" />
+                    </h3>
+                    <p>{industry.summary}</p>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+          <p className="media-note">
+            Photography is illustrative and does not show client work.
+          </p>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <h2>Clear from the first conversation.</h2>
+            <p>
+              You should understand the work, the dependencies and the cost
+              before committing to anything.
+            </p>
+          </div>
+          <ol className="steps">
+            {steps.map((step, index) => (
+              <li className="step" key={step.title}>
+                <div className="step-marker">
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                </div>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="section section-alt">
+        <div className="container faq-layout">
+          <div className="section-head">
+            <h2>Questions worth asking first.</h2>
+            <p>
+              A straightforward answer is more useful than a promise nobody can
+              verify. <Link href="/contact">Ask us anything else.</Link>
+            </p>
+          </div>
+          <FAQ />
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="cta-band">
+            <div className="cta-band-inner">
+              <div>
+                <h2>Let's find your next useful step.</h2>
+                <p>
+                  Tell us about your business. We start with the problem, not a
+                  package, and reply with a clear recommendation.
+                </p>
+              </div>
+              <div className="cta-actions">
+                <Button asChild variant="light" size="lg">
+                  <Link href="/contact">
+                    Talk about your project
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </Link>
+                </Button>
+                <Button asChild variant="inverseOutline" size="lg">
+                  <Link href="/pricing">How pricing works</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </>

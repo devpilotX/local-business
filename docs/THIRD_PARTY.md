@@ -5,7 +5,9 @@ The application assembles maintained UI, auth, data and animation libraries. Cus
 - Refine and its Ant Design integration: MIT, https://github.com/refinedev/refine. Used for resource routing, the authenticated workspace layout, data-provider integration and list/query primitives. License copy: `licenses/refine.txt`.
 - shadcn/ui patterns: MIT, https://github.com/shadcn-ui/ui. The button uses the Slot/CVA composition pattern. Dependency licenses are also retained by npm.
 - shadcn landing page by leoMirandaa: MIT, https://github.com/leoMirandaa/shadcn-landing-page. Hero composition and FAQ structure informed the adapted sections. License copy: `licenses/shadcn-landing-page.txt`.
-- Radix Primitives: MIT, https://github.com/radix-ui/primitives. Dialog/focus management and accordion behavior.
+- Radix Primitives: MIT, https://github.com/radix-ui/primitives. Dialog/focus management, navigation menu and accordion behavior.
+- Anatomy by wheresryan22: MIT, https://github.com/wheresryan22/anatomy. The isometric drawing kit in `src/components/iso/` is vendored unchanged apart from import paths and theme tokens; the homepage enquiry figure is drawn with it. License copy: `licenses/anatomy-LICENSE.txt`.
+- Geist and Geist Mono: SIL Open Font License, https://github.com/vercel/geist-font. Self-hosted through the `geist` package.
 - Ant Design: MIT, https://github.com/ant-design/ant-design. Workspace forms, tables, modal confirmations and progress indicators.
 - Motion: MIT, https://github.com/motiondivision/motion. Small in-view transitions with a reduced-motion alternative.
 - Lucide: ISC, https://github.com/lucide-icons/lucide. Interface icons and adapted MapPinned favicon geometry. See `licenses/lucide.txt`.

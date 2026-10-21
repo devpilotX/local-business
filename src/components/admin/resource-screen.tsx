@@ -105,6 +105,30 @@ const fields: Record<string, Field[]> = {
     { name: "businessHours" },
   ],
 };
+const tagColors: Record<string, string> = {
+  new: "blue",
+  contacted: "gold",
+  qualified: "purple",
+  won: "green",
+  lost: "default",
+  active: "green",
+  paused: "gold",
+  archived: "default",
+  planned: "blue",
+  "in-progress": "processing",
+  review: "purple",
+  completed: "green",
+  open: "blue",
+  done: "green",
+  published: "green",
+  draft: "default",
+  sent: "green",
+  pending: "gold",
+  processing: "processing",
+  failed: "red",
+  exhausted: "red",
+};
+const tagColor = (status: string) => tagColors[status] || "default";
 const friendly = (name: string) =>
   label(name.replace(/([A-Z])/g, " $1").replace(" Id", ""));
 function RelationSelect({
@@ -215,7 +239,9 @@ export function ResourceScreen({ resource }: { resource: string }) {
             {
               title: "Status",
               dataIndex: "status",
-              render: (v: unknown) => <Tag>{String(v)}</Tag>,
+              render: (v: unknown) => (
+                <Tag color={tagColor(String(v))}>{String(v)}</Tag>
+              ),
             },
             { title: "Attempts", dataIndex: "attempts" },
             { title: "Last error", dataIndex: "error" },
@@ -251,7 +277,15 @@ export function ResourceScreen({ resource }: { resource: string }) {
             {
               title: "Status",
               render: (_: unknown, r: AdminRecord) => (
-                <Tag>
+                <Tag
+                  color={tagColor(
+                    resource === "content"
+                      ? r.published
+                        ? "published"
+                        : "draft"
+                      : String(r.status || "active"),
+                  )}
+                >
                   {resource === "content"
                     ? r.published
                       ? "Published"
@@ -336,7 +370,10 @@ export function ResourceScreen({ resource }: { resource: string }) {
     <section id="main" className="admin-content">
       <List
         title={
-          <Typography.Title level={1} style={{ margin: 0, fontSize: 28 }}>
+          <Typography.Title
+            level={1}
+            style={{ margin: 0, fontSize: 24, letterSpacing: "-0.03em" }}
+          >
             {label(resource)}
           </Typography.Title>
         }
@@ -344,9 +381,9 @@ export function ResourceScreen({ resource }: { resource: string }) {
         headerButtons={
           <Space wrap>
             {resource !== "activity" ? (
-              <a href={`/api/crm/export?resource=${resource}`} download>
+              <Button href={`/api/crm/export?resource=${resource}`} download>
                 Export CSV
-              </a>
+              </Button>
             ) : null}
             {editable && resource !== "settings" ? (
               <Button type="primary" onClick={() => open(null)}>
@@ -391,7 +428,7 @@ export function ResourceScreen({ resource }: { resource: string }) {
               setSearch(value);
               setPage(1);
             }}
-            enterButton
+            enterButton="Search"
             style={{ maxWidth: 420, marginBottom: 20 }}
           />
         ) : null}

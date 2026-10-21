@@ -1,49 +1,28 @@
 import Link from "next/link";
-import {
-  ArrowUpRight,
-  MapPin,
-  PanelsTopLeft,
-  Workflow,
-  Search,
-  CalendarCheck,
-  MessageCircle,
-  MessagesSquare,
-  ChartNoAxesCombined,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { services } from "@/lib/content";
-
-const icons = {
-  MapPin,
-  PanelsTopLeft,
-  Workflow,
-  Search,
-  CalendarCheck,
-  MessageCircle,
-  MessagesSquare,
-  ChartNoAxesCombined,
-};
+import { serviceIcons, type ServiceId } from "./nav-data";
 
 export function ServiceCard({
   serviceId,
+  headingLevel: H = "h2",
 }: {
-  serviceId: (typeof services)[number]["id"];
+  serviceId: ServiceId;
+  headingLevel?: "h2" | "h3";
 }) {
   const item = services.find((service) => service.id === serviceId);
   if (!item) return null;
-
-  const Icon = icons[item.icon] ?? PanelsTopLeft;
-
+  const Icon = serviceIcons[item.icon];
   return (
-    <article className="service-card">
+    <Link className="service-card" href={`/services/${item.id}`}>
       <span className="service-icon">
-        <Icon size={25} aria-hidden="true" />
+        <Icon size={19} aria-hidden="true" />
       </span>
-      <h3>{item.title}</h3>
+      <H>{item.title}</H>
       <p>{item.summary}</p>
-      <Link href={`/services/${item.id}`}>
-        See what's included
-        <ArrowUpRight size={18} aria-hidden="true" />
-      </Link>
-    </article>
+      <span className="more">
+        Learn more <ArrowRight size={15} aria-hidden="true" />
+      </span>
+    </Link>
   );
 }
