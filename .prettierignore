@@ -1,0 +1,12 @@
+node_modules
+.next
+package-lock.json
+reference
+licenses
+public
+.env.local
+.data
+coverage
+playwright-report
+test-results
+assets/
