@@ -265,10 +265,21 @@ test("desktop and mobile accessibility, overflow and menu", async ({
   }
 });
 test("theme and reduced motion remain readable", async ({ page }) => {
+  await page.addInitScript(() => {
+    if (!window.localStorage.getItem("techcyme-theme")) {
+      window.localStorage.setItem("techcyme-theme", "light");
+    }
+  });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await page.getByRole("button", { name: "Toggle colour theme" }).click();
+  const themeButton = page.getByRole("button", {
+    name: "Toggle colour theme",
+    exact: true,
+  });
+  await expect(themeButton).toHaveAttribute("aria-pressed", "false");
+  await themeButton.click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(themeButton).toHaveAttribute("aria-pressed", "true");
   const results = await new AxeBuilder({ page })
     .withTags(["wcag2aa"])
     .analyze();
@@ -280,6 +291,12 @@ test("theme and reduced motion remain readable", async ({ page }) => {
   ).toEqual([]);
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(
+    page.getByRole("button", {
+      name: "Toggle colour theme",
+      exact: true,
+    }),
+  ).toHaveAttribute("aria-pressed", "true");
 });
 
 test("every CRM resource enforces authentication and private caching", async ({

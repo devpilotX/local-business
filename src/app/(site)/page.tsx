@@ -127,11 +127,13 @@ export default async function Home() {
           </p>
         </div>
         <div className="three-grid">
-          {[0, 1, 2].map((i) => (
-            <Reveal key={i}>
-              <ServiceCard index={i} />
-            </Reveal>
-          ))}
+          {(["google-business-profile", "websites", "automation"] as const).map(
+            (serviceId) => (
+              <Reveal key={serviceId}>
+                <ServiceCard serviceId={serviceId} />
+              </Reveal>
+            ),
+          )}
         </div>
         <Link className="text-link section-link" href="/services">
           See all services

@@ -11,7 +11,8 @@ import {
   ChartNoAxesCombined,
 } from "lucide-react";
 import { services } from "@/lib/content";
-const icons = [
+
+const icons = {
   MapPin,
   PanelsTopLeft,
   Workflow,
@@ -20,10 +21,18 @@ const icons = [
   MessageCircle,
   MessagesSquare,
   ChartNoAxesCombined,
-];
-export function ServiceCard({ index }: { index: number }) {
-  const item = services[index];
-  const Icon = icons[index];
+};
+
+export function ServiceCard({
+  serviceId,
+}: {
+  serviceId: (typeof services)[number]["id"];
+}) {
+  const item = services.find((service) => service.id === serviceId);
+  if (!item) return null;
+
+  const Icon = icons[item.icon] ?? PanelsTopLeft;
+
   return (
     <article className="service-card">
       <span className="service-icon">

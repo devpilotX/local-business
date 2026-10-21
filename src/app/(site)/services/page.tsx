@@ -21,8 +21,8 @@ export default function Services() {
         </p>
       </section>
       <section className="container section services-grid">
-        {services.map((s, i) => (
-          <ServiceCard key={s.id} index={i} />
+        {services.map((service) => (
+          <ServiceCard key={service.id} serviceId={service.id} />
         ))}
       </section>
     </>
