@@ -17,7 +17,7 @@ export const questions = [
   },
   {
     q: "How much will the work cost?",
-    a: "Starting prices are listed on the pricing page, for example a business website from ₹14,999. Your exact price is fixed in a written scope after a short review, including any provider costs.",
+    a: "We quote one fixed price after a short review of what you need and what you already have. The written scope lists the deliverables and any provider costs before you commit.",
   },
   {
     q: "Do I have to pay everything up front?",

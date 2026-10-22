@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail } from "lucide-react";
+import { WhatsAppIcon } from "./whatsapp";
 import { whatsappHref } from "@/lib/contact";
 import { Brand } from "./header";
 import { industries, services } from "@/lib/content";
@@ -38,8 +39,8 @@ export function Footer({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <MessageCircle size={16} aria-hidden="true" />
-                WhatsApp
+                <WhatsAppIcon size={16} />
+                {whatsapp}
                 <span className="sr-only"> (opens in a new tab)</span>
               </a>
             ) : null}

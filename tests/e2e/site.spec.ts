@@ -486,20 +486,29 @@ test("brand icons are served", async ({ request }) => {
   }
 });
 
-test("pricing shows starting prices and the two-part payment plan", async ({
+test("pricing explains the two-part plan without listing prices", async ({
   page,
 }) => {
-  await page.goto("/pricing");
-  await expect(page.locator(".price-row")).toHaveCount(8);
-  await expect(page.getByText("From ₹14,999").first()).toBeVisible();
-  await expect(
-    page.locator(".pay-plan").getByText("50% when you approve the scope"),
-  ).toBeVisible();
-  await expect(
-    page.locator(".pay-plan").getByText("50% on delivery"),
-  ).toBeVisible();
-  await page.goto("/services/websites");
-  await expect(page.locator(".price-panel")).toContainText("₹14,999");
+  for (const path of ["/", "/pricing", "/services/websites"]) {
+    await page.goto(path);
+    await expect(page.locator("main"), path).not.toContainText("₹");
+    await expect(
+      page.locator(".pay-plan").getByText("50% on delivery"),
+      path,
+    ).toBeVisible();
+  }
   await page.goto("/");
   await expect(page.locator(".work-card")).toHaveCount(2);
+});
+
+test("contact shows WhatsApp and role mailboxes", async ({ page }) => {
+  await page.goto("/contact");
+  await expect(page.locator(".wa-float")).toHaveAttribute(
+    "href",
+    /^https:\/\/wa\.me\/917209777056/,
+  );
+  for (const box of ["support", "delivery", "contact"])
+    await expect(
+      page.locator(`a[href="mailto:${box}@techcyme.com"]`).first(),
+    ).toBeVisible();
 });

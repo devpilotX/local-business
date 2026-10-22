@@ -15,7 +15,7 @@ import { questions } from "@/components/ui/faq-data";
 import { Reveal } from "@/components/site/reveal";
 import { EnquiryFigure } from "@/components/site/enquiry-figure";
 import { WorkShowcase } from "@/components/site/work-showcase";
-import { PaymentPlan, PriceTable } from "@/components/site/detail-sections";
+import { PaymentPlan } from "@/components/site/detail-sections";
 import { ServiceArt } from "@/components/site/service-art";
 import { industryNav, type ServiceId } from "@/components/site/nav-data";
 import { getSettings } from "@/lib/site-data";
@@ -346,19 +346,16 @@ export default async function Home() {
       <section className="section section-alt" aria-labelledby="price-title">
         <div className="container">
           <div className="section-head section-head--split">
-            <h2 id="price-title">Clear prices. Pay half to start.</h2>
+            <h2 id="price-title">Fixed price. Pay half to start.</h2>
             <p>
-              Every service has a published starting price, below typical market
-              rates. The rest is fixed in your written scope.
+              Every project gets a written scope with one fixed price. No full
+              payment up front and no surprise costs later.
             </p>
           </div>
-          <PriceTable
-            ids={["google-business-profile", "websites", "automation"]}
-          />
           <div className="price-teaser-foot">
             <PaymentPlan />
             <Link className="text-link" href="/pricing">
-              See all prices <ArrowRight size={16} aria-hidden="true" />
+              How pricing works <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>
         </div>

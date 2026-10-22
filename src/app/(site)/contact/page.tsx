@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { Clock, Mail, MessageCircle, ShieldCheck } from "lucide-react";
+import { Clock, LifeBuoy, Mail, PackageCheck } from "lucide-react";
+import { WhatsAppIcon } from "@/components/site/whatsapp";
+import { mailboxes } from "@/lib/config";
 import { ContactForm } from "@/components/site/contact-form";
 import { Breadcrumbs } from "@/components/site/page-hero";
 import { getSettings } from "@/lib/site-data";
@@ -47,29 +49,54 @@ export default async function Contact({
           a better home. Start with the part you want to improve.
         </p>
         <ul className="contact-details">
-          <li>
-            <Mail size={18} aria-hidden="true" />
-            <div>
-              <strong>Email</strong>
-              <a href={`mailto:${settings.contactEmail}`}>
-                {settings.contactEmail}
-              </a>
-              <span className="contact-sub">{replyTime}</span>
-            </div>
-          </li>
           {whatsapp ? (
             <li>
-              <MessageCircle size={18} aria-hidden="true" />
+              <WhatsAppIcon size={18} />
               <div>
                 <strong>WhatsApp</strong>
                 <a href={whatsapp} target="_blank" rel="noopener noreferrer">
-                  Message us on WhatsApp
+                  {settings.whatsapp}
                   <span className="sr-only"> (opens in a new tab)</span>
                 </a>
-                <span className="contact-sub">Messages only, no calls.</span>
+                <span className="contact-sub">
+                  Messages only, no calls. Usually the fastest way to reach us.
+                </span>
               </div>
             </li>
           ) : null}
+          {[
+            [Mail, "New projects", settings.contactEmail, replyTime],
+            [
+              LifeBuoy,
+              "Existing clients",
+              mailboxes.support,
+              "Questions about live work and support.",
+            ],
+            [
+              PackageCheck,
+              "Delivery and handover",
+              mailboxes.delivery,
+              "Files, access and cancellations.",
+            ],
+            [
+              Mail,
+              "General and privacy",
+              mailboxes.contact,
+              "Anything else, including data requests.",
+            ],
+          ].map(([Icon, label, address, note]) => {
+            const I = Icon as typeof Mail;
+            return (
+              <li key={String(label)}>
+                <I size={18} aria-hidden="true" />
+                <div>
+                  <strong>{String(label)}</strong>
+                  <a href={`mailto:${String(address)}`}>{String(address)}</a>
+                  <span className="contact-sub">{String(note)}</span>
+                </div>
+              </li>
+            );
+          })}
           {settings.businessHours ? (
             <li>
               <Clock size={18} aria-hidden="true" />
@@ -79,16 +106,6 @@ export default async function Contact({
               </div>
             </li>
           ) : null}
-          <li>
-            <ShieldCheck size={18} aria-hidden="true" />
-            <div>
-              <strong>Your details</strong>
-              <span>
-                Used only to review and reply to this enquiry. No marketing
-                list.
-              </span>
-            </div>
-          </li>
         </ul>
         <div className="contact-next">
           <h2>What happens next</h2>

@@ -3,15 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { ArrowRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "./reveal";
-import {
-  inr,
-  paymentPlan,
-  servicePrices,
-  type Item,
-  type Step,
-} from "@/lib/page-details";
-import { services } from "@/lib/content";
-import { serviceIcons, type ServiceId } from "./nav-data";
+import { paymentPlan, type Item, type Step } from "@/lib/page-details";
 
 export function Glance({
   items,
@@ -156,64 +148,6 @@ export function CtaBand({
         </div>
       </div>
     </section>
-  );
-}
-
-export function PriceTable({ ids }: { ids: ServiceId[] }) {
-  return (
-    <div className="price-table">
-      {ids.map((id) => {
-        const s = services.find((x) => x.id === id)!;
-        const p = servicePrices[id];
-        const Icon = serviceIcons[s.icon];
-        return (
-          <Reveal key={id} className="price-row" as="article">
-            <span className="glance-icon">
-              <Icon size={18} aria-hidden="true" />
-            </span>
-            <div className="price-row-main">
-              <h3>
-                <Link href={`/services/${id}`}>{s.title}</Link>
-              </h3>
-              <p>{p.basis}</p>
-            </div>
-            <div className="price-row-price">
-              <span className="price-market">
-                Typical market rate {inr(p.market[0])} to {inr(p.market[1])}
-              </span>
-              <strong>
-                <small>From</small> {inr(p.from)}
-              </strong>
-              <span className="price-unit">{p.unit}</span>
-            </div>
-          </Reveal>
-        );
-      })}
-    </div>
-  );
-}
-
-export function PriceCard({ id }: { id: ServiceId }) {
-  const p = servicePrices[id];
-  return (
-    <div className="price-panel">
-      <div className="price-panel-main">
-        <span className="price-market">
-          Typical market rate {inr(p.market[0])} to {inr(p.market[1])}
-        </span>
-        <strong className="price-big">
-          <small>From</small> {inr(p.from)}
-          <span>{p.unit}</span>
-        </strong>
-        <p>{p.basis}</p>
-        <Button asChild>
-          <Link href={`/contact?service=${id}`}>
-            Get an exact quote <ArrowRight size={16} aria-hidden="true" />
-          </Link>
-        </Button>
-      </div>
-      <PaymentPlan />
-    </div>
   );
 }
 

@@ -26,6 +26,7 @@ try {
           contactEmail: business.email,
           phone: "",
           businessHours: "",
+          whatsapp: "+91 72097 77056",
         });
       for (const page of pages) {
         if (

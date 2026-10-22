@@ -24,8 +24,6 @@ import {
   Glance,
   Notes,
   PaymentPlan,
-  PriceCard,
-  PriceTable,
 } from "./detail-sections";
 import {
   aboutGaps,
@@ -36,7 +34,7 @@ import {
   principles,
   processSteps,
   serviceDetails,
-  servicePrices,
+  pricingFactors,
 } from "@/lib/page-details";
 import {
   JsonLd,
@@ -120,8 +118,26 @@ function ServiceLayout({ page, id }: { page: Content; id: ServiceId }) {
       <Block title="How it works" id="how" alt>
         <Flow steps={detail.steps} />
       </Block>
-      <Block title="Price" id="price">
-        <PriceCard id={id} />
+      <Block
+        title="How pricing works"
+        lede="A fixed price in your written scope, paid in two parts."
+        id="price"
+      >
+        <div className="price-panel">
+          <div className="price-panel-main">
+            <strong className="price-big">Fixed price per project</strong>
+            <p>
+              We review what you already have, then send a written scope with
+              one price. No hourly billing and no hidden costs.
+            </p>
+            <Button asChild>
+              <Link href={`/contact?service=${id}`}>
+                Get a quote <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            </Button>
+          </div>
+          <PaymentPlan />
+        </div>
       </Block>
       <Block title="Good to know" id="notes" alt>
         <Notes notes={detail.notes} />
@@ -190,22 +206,38 @@ function PricingLayout({ page }: { page: Content }) {
         </Button>
       </PageHero>
       <Block
-        title="Starting prices"
-        lede="Lower than typical market rates, with the full price fixed in your written scope."
-        id="prices"
-      >
-        <PriceTable ids={services.map((s) => s.id)} />
-      </Block>
-      <Block
         title="Pay in two parts"
         lede="No full payment up front. Half when you approve, half on delivery."
         id="payment"
-        alt
       >
         <PaymentPlan />
       </Block>
-      <Block title="How a quote works" id="quote">
+      <Block title="How a quote works" id="quote" alt>
         <Flow steps={pricingSteps} />
+      </Block>
+      <Block
+        title="What shapes the price"
+        lede="Every quote is built from the work you actually need."
+        id="factors"
+      >
+        <div className="price-grid">
+          {pricingFactors.map(({ icon: Icon, title, factors }) => (
+            <article className="price-card reveal" key={title}>
+              <span className="glance-icon">
+                <Icon size={19} aria-hidden="true" />
+              </span>
+              <h3>{title}</h3>
+              <ul aria-label={`${title} price factors`}>
+                {factors.map((f) => (
+                  <li key={f}>
+                    <Check size={15} aria-hidden="true" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
       </Block>
       <Block title="No surprises" id="no-surprises" alt>
         <Notes notes={pricingNotes} />
@@ -369,7 +401,6 @@ export function ContentPage({ page, email }: { page: Content; email: string }) {
             name: page.title,
             description: page.summary,
             path,
-            price: servicePrices[serviceId].from,
           }),
         ]
       : []),

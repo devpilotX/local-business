@@ -6,7 +6,8 @@ The repository is not ready to represent a verified legal entity until the opera
 
 - Confirm the legal business name, country/jurisdiction and business contact address.
 - Confirm the correct phone number. The earlier live website showed inconsistent visible numbers and telephone links, so no default was copied.
-- Confirm ownership of `techcyme@gmail.com`, or replace it with a working address you control. A website cannot create a mailbox by naming one.
+- Create the `connect@`, `contact@`, `support@`, `delivery@` and `team@techcyme.com` mailboxes or aliases in Google Workspace and send a test message to each. A website cannot create a mailbox by naming one.
+- Confirm the WhatsApp number in Settings opens the right chat.
 - Review all six policy/security pages with the actual operator, hosting/SMTP providers, retention schedule and applicable law. Draft text is not legal advice.
 - Agree service scope, cancellation/refund terms, support commitments, domain/account ownership and third-party costs.
 - Confirm the site does not claim Google affiliation, guaranteed verification/rankings, nonexistent clients or unverified results.

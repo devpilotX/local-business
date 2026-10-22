@@ -652,74 +652,46 @@ export const pricingSteps: Step[] = [
   },
 ];
 
+export const pricingFactors: {
+  icon: LucideIcon;
+  title: string;
+  factors: string[];
+}[] = [
+  {
+    icon: MapPin,
+    title: "Local visibility",
+    factors: [
+      "New profile or a review of an existing one",
+      "Number of locations",
+      "Photos and descriptions ready to use",
+    ],
+  },
+  {
+    icon: PanelsTopLeft,
+    title: "Websites",
+    factors: [
+      "Number of pages",
+      "Whether content is ready",
+      "Forms, booking or other integrations",
+    ],
+  },
+  {
+    icon: Workflow,
+    title: "Workflows",
+    factors: [
+      "Tools to connect",
+      "Provider plans and limits",
+      "Error handling and monitoring",
+    ],
+  },
+];
+
 export const pricingNotes: string[] = [
   "Google Business Profile is free. Any fee covers the agreed work.",
   "Domain, hosting and third-party tools are listed in the quote, not added later.",
   "If the scope changes, cost and timing are agreed before work continues.",
   "Prices are in Indian rupees. Applicable taxes, if any, are shown on the quote.",
 ];
-
-// Pricing. Market ranges are indicative estimates for small agencies and
-// freelancers in India; Techcyme prices are starting points for a basic scope.
-export interface ServicePrice {
-  from: number;
-  market: [number, number];
-  unit: string;
-  basis: string;
-}
-
-export const servicePrices: Record<ServiceId, ServicePrice> = {
-  "google-business-profile": {
-    from: 2999,
-    market: [5000, 12000],
-    unit: "one time",
-    basis: "One location: setup or review, details, photos and handover.",
-  },
-  websites: {
-    from: 14999,
-    market: [25000, 60000],
-    unit: "one time",
-    basis: "Up to 5 pages, enquiry form, mobile layout and search basics.",
-  },
-  automation: {
-    from: 7999,
-    market: [15000, 40000],
-    unit: "per workflow",
-    basis: "One workflow, such as enquiry to lead, task and notification.",
-  },
-  "local-seo": {
-    from: 5999,
-    market: [10000, 25000],
-    unit: "one time",
-    basis: "Audit of website, profile and listings, plus agreed fixes.",
-  },
-  booking: {
-    from: 8999,
-    market: [15000, 35000],
-    unit: "one time",
-    basis: "Appointment request journey with confirmation messages.",
-  },
-  "social-media": {
-    from: 4999,
-    market: [8000, 20000],
-    unit: "one time",
-    basis: "Profile clean-up on two channels and a 30-day content plan.",
-  },
-  messaging: {
-    from: 6999,
-    market: [10000, 30000],
-    unit: "one time",
-    basis: "WhatsApp routing and agreed replies. Provider charges extra.",
-  },
-  reporting: {
-    from: 5999,
-    market: [10000, 30000],
-    unit: "one time",
-    basis: "One shared report for enquiries or project status.",
-  },
-};
-
-export const inr = (value: number) => `₹${value.toLocaleString("en-IN")}`;
 
 export const paymentPlan: Step[] = [
   {

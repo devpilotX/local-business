@@ -38,7 +38,7 @@ npm run dev
 
 Open `http://localhost:3000`. The workspace is at `/admin`. Admin passwords must be at least 14 characters. Do not put credentials into a README, issue, committed file or terminal command that will be shared. `admin:create` is an operator-only provisioning command. Public registration remains disabled in the web process.
 
-The example does not invent an administrator password, company address or phone number. `techcyme@gmail.com` is the existing published contact address. Confirm that you control it. No new mailboxes or aliases are created.
+The example does not invent an administrator password or company address. The site publishes role mailboxes on `techcyme.com` (`connect@`, `contact@`, `support@`, `delivery@`, `team@`, set with the `EMAIL_*` variables) and a WhatsApp number from site settings. Create those mailboxes or aliases in Google Workspace before launch; naming an address on the website does not create it.
 
 The migration seeds missing pages and settings. It does not overwrite saved content. Do not run concurrent schema migrations. Future schema changes require an additive, reviewed migration and a backup.
 
