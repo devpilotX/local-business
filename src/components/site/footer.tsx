@@ -1,11 +1,21 @@
 import Link from "next/link";
-import { Mail } from "lucide-react";
+import { Mail, MessageCircle } from "lucide-react";
+import { whatsappHref } from "@/lib/contact";
 import { Brand } from "./header";
 import { industries, services } from "@/lib/content";
 import { industryNav } from "./nav-data";
 
-export function Footer({ name, email }: { name: string; email: string }) {
+export function Footer({
+  name,
+  email,
+  whatsapp,
+}: {
+  name: string;
+  email: string;
+  whatsapp: string;
+}) {
   const year = new Date().getFullYear();
+  const wa = whatsappHref(whatsapp);
   return (
     <footer className="site-footer">
       <div className="container">
@@ -21,6 +31,18 @@ export function Footer({ name, email }: { name: string; email: string }) {
               <Mail size={16} aria-hidden="true" />
               {email}
             </a>
+            {wa ? (
+              <a
+                className="footer-contact"
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MessageCircle size={16} aria-hidden="true" />
+                WhatsApp
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            ) : null}
           </div>
           <FooterCol
             title="Services"
@@ -52,7 +74,7 @@ export function Footer({ name, email }: { name: string; email: string }) {
             title="Legal"
             links={[
               { href: "/privacy", label: "Privacy notice" },
-              { href: "/terms", label: "Website terms" },
+              { href: "/terms", label: "Terms of service" },
               { href: "/cookies", label: "Cookie notice" },
               { href: "/refund-policy", label: "Cancellations and refunds" },
               { href: "/accessibility", label: "Accessibility" },

@@ -98,6 +98,14 @@ export const schemas = {
       contactEmail: email,
       phone: text(32).default(""),
       businessHours: text(100).default(""),
+      whatsapp: z
+        .string()
+        .trim()
+        .regex(
+          /^(\+?[0-9 ]{10,18})?$/,
+          "Enter a full WhatsApp number with country code.",
+        )
+        .default(""),
     })
     .strict(),
 };

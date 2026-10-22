@@ -23,17 +23,20 @@ import {
   Flow,
   Glance,
   Notes,
+  PaymentPlan,
+  PriceCard,
+  PriceTable,
 } from "./detail-sections";
 import {
   aboutGaps,
   aboutNeeds,
   industryDetails,
-  pricingFactors,
   pricingNotes,
   pricingSteps,
   principles,
   processSteps,
   serviceDetails,
+  servicePrices,
 } from "@/lib/page-details";
 import {
   JsonLd,
@@ -44,7 +47,7 @@ import {
 } from "@/lib/schema";
 
 const pricingQuestions = questions.filter((q) =>
-  /cost|free|own|long/i.test(q.q),
+  /cost|free|pay|own|long/i.test(q.q),
 );
 
 const needsLede: Record<IndustrySlug, string> = {
@@ -117,13 +120,16 @@ function ServiceLayout({ page, id }: { page: Content; id: ServiceId }) {
       <Block title="How it works" id="how" alt>
         <Flow steps={detail.steps} />
       </Block>
-      <Block title="Good to know" id="notes">
+      <Block title="Price" id="price">
+        <PriceCard id={id} />
+      </Block>
+      <Block title="Good to know" id="notes" alt>
         <Notes notes={detail.notes} />
         <div style={{ marginTop: 16 }}>
           <Details body={page.body} />
         </div>
       </Block>
-      <Block title="Related services" id="related" alt>
+      <Block title="Related services" id="related">
         <Tiles ids={detail.related} />
       </Block>
       <CtaBand {...detail.cta} href={`/contact?service=${id}`} />
@@ -183,39 +189,25 @@ function PricingLayout({ page }: { page: Content }) {
           <Link href="/services">Explore services</Link>
         </Button>
       </PageHero>
+      <Block
+        title="Starting prices"
+        lede="Lower than typical market rates, with the full price fixed in your written scope."
+        id="prices"
+      >
+        <PriceTable ids={services.map((s) => s.id)} />
+      </Block>
+      <Block
+        title="Pay in two parts"
+        lede="No full payment up front. Half when you approve, half on delivery."
+        id="payment"
+        alt
+      >
+        <PaymentPlan />
+      </Block>
       <Block title="How a quote works" id="quote">
         <Flow steps={pricingSteps} />
       </Block>
-      <Block
-        title="What shapes the cost"
-        lede="Three kinds of work, each priced from its own factors."
-        id="factors"
-        alt
-      >
-        <div className="price-grid">
-          {pricingFactors.map(({ icon: Icon, title, factors }) => (
-            <article className="price-card reveal" key={title}>
-              <span className="glance-icon">
-                <Icon size={19} aria-hidden="true" />
-              </span>
-              <h3>{title}</h3>
-              <p className="price-tag">
-                Quoted per project
-                <span>After a short review of what you have</span>
-              </p>
-              <ul aria-label={`${title} cost factors`}>
-                {factors.map((f) => (
-                  <li key={f}>
-                    <Check size={15} aria-hidden="true" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </Block>
-      <Block title="No surprises" id="no-surprises">
+      <Block title="No surprises" id="no-surprises" alt>
         <Notes notes={pricingNotes} />
         <div style={{ marginTop: 16 }}>
           <Details
@@ -372,7 +364,14 @@ export function ContentPage({ page, email }: { page: Content; email: string }) {
   const schema = [
     webPageSchema({ title: page.title, description: page.summary, path }),
     ...(serviceId
-      ? [serviceSchema({ name: page.title, description: page.summary, path })]
+      ? [
+          serviceSchema({
+            name: page.title,
+            description: page.summary,
+            path,
+            price: servicePrices[serviceId].from,
+          }),
+        ]
       : []),
     ...(section === "guides"
       ? [articleSchema({ title: page.title, description: page.summary, path })]

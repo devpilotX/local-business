@@ -17,10 +17,14 @@ export const questions = [
   },
   {
     q: "How much will the work cost?",
-    a: "We quote after reviewing the work, content and integrations you need. The scope explains deliverables, provider costs and any ongoing support before work starts.",
+    a: "Starting prices are listed on the pricing page, for example a business website from ₹14,999. Your exact price is fixed in a written scope after a short review, including any provider costs.",
+  },
+  {
+    q: "Do I have to pay everything up front?",
+    a: "No. You pay 50% when you approve the scope and the remaining 50% when the agreed work is delivered.",
   },
   {
     q: "How long does a typical project take?",
-    a: "It depends on the scope and on how quickly content and account access are ready. The written scope lists review points and a target date before work begins.",
+    a: "A Google Business Profile review often takes a few days and a small website two to four weeks. It depends on the scope and on how quickly content and access are ready. The written scope gives a target date.",
   },
 ];

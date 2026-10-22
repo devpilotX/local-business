@@ -103,6 +103,7 @@ const fields: Record<string, Field[]> = {
     { name: "contactEmail", type: "email", required: true },
     { name: "phone" },
     { name: "businessHours" },
+    { name: "whatsapp" },
   ],
 };
 const tagColors: Record<string, string> = {

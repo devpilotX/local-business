@@ -485,3 +485,21 @@ test("brand icons are served", async ({ request }) => {
     expect(response.headers()["content-type"], path).toContain(type);
   }
 });
+
+test("pricing shows starting prices and the two-part payment plan", async ({
+  page,
+}) => {
+  await page.goto("/pricing");
+  await expect(page.locator(".price-row")).toHaveCount(8);
+  await expect(page.getByText("From ₹14,999").first()).toBeVisible();
+  await expect(
+    page.locator(".pay-plan").getByText("50% when you approve the scope"),
+  ).toBeVisible();
+  await expect(
+    page.locator(".pay-plan").getByText("50% on delivery"),
+  ).toBeVisible();
+  await page.goto("/services/websites");
+  await expect(page.locator(".price-panel")).toContainText("₹14,999");
+  await page.goto("/");
+  await expect(page.locator(".work-card")).toHaveCount(2);
+});

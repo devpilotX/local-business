@@ -8,6 +8,8 @@ const assets = {
   "apple-icon": "src/app/apple-icon.png",
   icon: "public/icon.png",
   favicon: "src/app/favicon.ico",
+  "work-paisareality": "public/images/work-paisareality.jpg",
+  "work-campusvoice": "public/images/work-campusvoice.jpg",
 };
 for (const [name, destination] of Object.entries(assets)) {
   mkdirSync(dirname(destination), { recursive: true });

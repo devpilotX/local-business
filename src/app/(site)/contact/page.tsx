@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Clock, Mail, Phone, ShieldCheck } from "lucide-react";
+import { Clock, Mail, MessageCircle, ShieldCheck } from "lucide-react";
 import { ContactForm } from "@/components/site/contact-form";
 import { Breadcrumbs } from "@/components/site/page-hero";
 import { getSettings } from "@/lib/site-data";
 import { JsonLd, webPageSchema } from "@/lib/schema";
+import { replyTime, whatsappHref } from "@/lib/contact";
 
 const description =
   "Send a project enquiry about Google Business Profile, a business website or an everyday workflow. Submitting the form does not start paid work.";
@@ -22,6 +23,10 @@ export default async function Contact({
 }) {
   const settings = await getSettings();
   const { service } = await searchParams;
+  const whatsapp = whatsappHref(
+    settings.whatsapp,
+    "Hello Techcyme, I would like to discuss a project.",
+  );
   return (
     <div className="container contact-layout">
       <JsonLd
@@ -49,16 +54,19 @@ export default async function Contact({
               <a href={`mailto:${settings.contactEmail}`}>
                 {settings.contactEmail}
               </a>
+              <span className="contact-sub">{replyTime}</span>
             </div>
           </li>
-          {settings.phone ? (
+          {whatsapp ? (
             <li>
-              <Phone size={18} aria-hidden="true" />
+              <MessageCircle size={18} aria-hidden="true" />
               <div>
-                <strong>Phone</strong>
-                <a href={`tel:${settings.phone.replace(/[^+0-9]/g, "")}`}>
-                  {settings.phone}
+                <strong>WhatsApp</strong>
+                <a href={whatsapp} target="_blank" rel="noopener noreferrer">
+                  Message us on WhatsApp
+                  <span className="sr-only"> (opens in a new tab)</span>
                 </a>
+                <span className="contact-sub">Messages only, no calls.</span>
               </div>
             </li>
           ) : null}
@@ -85,11 +93,12 @@ export default async function Contact({
         <div className="contact-next">
           <h2>What happens next</h2>
           <ol>
-            <li>We read your enquiry and reply by email.</li>
+            <li>We read your enquiry and reply within 1 business day.</li>
             <li>
               If it is a fit, we agree a short call to review the details.
             </li>
-            <li>You receive a written scope before any paid work begins.</li>
+            <li>You receive a written scope and a fixed price.</li>
+            <li>You pay 50% to start and 50% on delivery.</li>
           </ol>
         </div>
       </div>

@@ -6,18 +6,16 @@ import {
   BadgeCheck,
   Check,
   ClipboardCheck,
-  FileText,
-  KeyRound,
   Mail,
-  Scale,
   Send,
-  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FAQ } from "@/components/ui/faq";
 import { questions } from "@/components/ui/faq-data";
 import { Reveal } from "@/components/site/reveal";
 import { EnquiryFigure } from "@/components/site/enquiry-figure";
+import { WorkShowcase } from "@/components/site/work-showcase";
+import { PaymentPlan, PriceTable } from "@/components/site/detail-sections";
 import { ServiceArt } from "@/components/site/service-art";
 import { industryNav, type ServiceId } from "@/components/site/nav-data";
 import { getSettings } from "@/lib/site-data";
@@ -56,44 +54,6 @@ const bento: {
   {
     id: "reporting",
     tags: ["Enquiries", "Project status"],
-  },
-];
-
-const principles = [
-  {
-    icon: FileText,
-    title: "Written scope first",
-    body: "Deliverables, dependencies and cost are agreed in writing before work starts.",
-  },
-  {
-    icon: KeyRound,
-    title: "Accounts stay yours",
-    body: "Your domain, profile and tools remain in the business name, with a documented handover.",
-  },
-  {
-    icon: Scale,
-    title: "Honest about limits",
-    body: "Google controls rankings. We improve the information and structure, without promising positions.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Privacy by default",
-    body: "Forms collect only what is needed, and personal data stays out of logs and exports.",
-  },
-];
-
-const steps = [
-  {
-    title: "Review the starting point",
-    body: "Tell us what you do, what you already have and where enquiries or updates get stuck.",
-  },
-  {
-    title: "Agree a useful scope",
-    body: "Choose the deliverables, responsibilities and review points. Everything is written down.",
-  },
-  {
-    title: "Build, check and hand over",
-    body: "We complete the agreed checks, walk you through the result and hand over access.",
   },
 ];
 
@@ -323,27 +283,20 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section" aria-labelledby="work-title">
         <div className="container">
-          <div className="section-head">
-            <h2>How we work with every client.</h2>
+          <div className="section-head section-head--split">
+            <h2 id="work-title">Work that is live today.</h2>
             <p>
-              A few commitments that apply to every project, whatever its size.
+              Two platforms we built and run ourselves, each used by real
+              visitors every day.
             </p>
           </div>
-          <div className="principles">
-            {principles.map(({ icon: Icon, title: heading, body }) => (
-              <div className="principle reveal" key={heading}>
-                <Icon size={22} aria-hidden="true" />
-                <h3>{heading}</h3>
-                <p>{body}</p>
-              </div>
-            ))}
-          </div>
+          <WorkShowcase />
         </div>
       </section>
 
-      <section className="section section-alt">
+      <section className="section">
         <div className="container">
           <div className="section-head section-head--split">
             <h2>Planned around the way your business works.</h2>
@@ -390,30 +343,27 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section section-alt" aria-labelledby="price-title">
         <div className="container">
-          <div className="section-head">
-            <h2>Clear from the first conversation.</h2>
+          <div className="section-head section-head--split">
+            <h2 id="price-title">Clear prices. Pay half to start.</h2>
             <p>
-              You should understand the work, the dependencies and the cost
-              before committing to anything.
+              Every service has a published starting price, below typical market
+              rates. The rest is fixed in your written scope.
             </p>
           </div>
-          <ol className="steps">
-            {steps.map((step, index) => (
-              <li className="step reveal" key={step.title}>
-                <div className="step-marker">
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                </div>
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
-              </li>
-            ))}
-          </ol>
+          <PriceTable
+            ids={["google-business-profile", "websites", "automation"]}
+          />
+          <div className="price-teaser-foot">
+            <PaymentPlan />
+            <Link className="text-link" href="/pricing">
+              See all prices <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </section>
-
-      <section className="section section-alt">
+      <section className="section">
         <div className="container faq-layout">
           <div className="section-head">
             <h2>Questions worth asking first.</h2>

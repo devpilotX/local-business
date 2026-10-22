@@ -79,12 +79,29 @@ export function serviceSchema({
   name,
   description,
   path,
+  price,
 }: {
   name: string;
   description: string;
   path: string;
+  price?: number;
 }): Json {
   return {
+    ...(price
+      ? {
+          offers: {
+            "@type": "Offer",
+            priceCurrency: "INR",
+            price,
+            priceSpecification: {
+              "@type": "PriceSpecification",
+              minPrice: price,
+              priceCurrency: "INR",
+            },
+            url: abs(path),
+          },
+        }
+      : {}),
     "@type": "Service",
     "@id": `${abs(path)}#service`,
     name,

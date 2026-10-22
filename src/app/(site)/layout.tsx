@@ -14,7 +14,11 @@ export default async function SiteLayout({
       <ThemeSync />
       <Header name={settings.siteName} />
       <main id="main">{children}</main>
-      <Footer name={settings.siteName} email={settings.contactEmail} />
+      <Footer
+        name={settings.siteName}
+        email={settings.contactEmail}
+        whatsapp={settings.whatsapp}
+      />
     </>
   );
 }

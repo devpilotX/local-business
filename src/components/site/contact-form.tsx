@@ -86,7 +86,8 @@ export function ContactForm({
     >
       <h2 className="form-title">Project enquiry</h2>
       <p className="form-intro">
-        All fields are required unless marked optional.
+        All fields are required unless marked optional. We reply within 1
+        business day.
       </p>
       <div className="form-row">
         <label>
